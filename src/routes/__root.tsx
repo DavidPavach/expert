@@ -4,12 +4,15 @@ import {
 	HeadContent,
 	Scripts,
 } from "@tanstack/react-router";
+import { ToastContainer } from "react-fox-toast";
+import { ThemeSync } from "#/hooks/ThemeSync";
 import appCss from "../styles.css?url";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
 }
 
+export const APP_NAME = "ExpertMirrorCon - Copy . AI . Bot";
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	head: () => ({
 		meta: [
@@ -21,7 +24,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "ExpertMirrorCon - Copy . AI . Bot",
+				title: APP_NAME,
+			},
+			{
+				name: "description",
+				content:
+					"Your reliable gateway to trading Stocks, Fiat currencies, Exchange-traded funds, Options and futures and other tradable assets",
 			},
 		],
 		links: [
@@ -39,9 +47,26 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 		<html lang="en">
 			<head>
 				<HeadContent />
+				<script>
+					{`(function() {
+						const saved = localStorage.getItem('theme');
+						const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+						const theme = saved || (systemDark ? 'dark' : 'light');
+						document.documentElement.classList.toggle(
+							'dark',
+							theme === 'dark'
+						);
+					})();`}
+				</script>
 			</head>
 			<body>
 				{children}
+				<ToastContainer
+					position="top-center"
+					isPausedOnHover={true}
+					duration={5000}
+				/>
+				<ThemeSync />
 				<Scripts />
 			</body>
 		</html>
