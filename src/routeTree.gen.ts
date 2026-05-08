@@ -14,8 +14,10 @@ import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard/dashboard'
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
+import { Route as AuthOperationsRouteImport } from './routes/_auth/operations'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotRouteImport } from './routes/_auth/forgot'
+import { Route as AdminTransactionsRouteImport } from './routes/_admin/transactions'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/_dashboard',
@@ -40,6 +42,11 @@ const AuthRegisterRoute = AuthRegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthOperationsRoute = AuthOperationsRouteImport.update({
+  id: '/operations',
+  path: '/operations',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -50,18 +57,27 @@ const AuthForgotRoute = AuthForgotRouteImport.update({
   path: '/forgot',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
+  id: '/_admin/transactions',
+  path: '/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/transactions': typeof AdminTransactionsRoute
   '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
+  '/operations': typeof AuthOperationsRoute
   '/register': typeof AuthRegisterRoute
   '/dashboard': typeof DashboardDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/transactions': typeof AdminTransactionsRoute
   '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
+  '/operations': typeof AuthOperationsRoute
   '/register': typeof AuthRegisterRoute
   '/dashboard': typeof DashboardDashboardRoute
 }
@@ -70,23 +86,41 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_dashboard': typeof DashboardRouteRouteWithChildren
+  '/_admin/transactions': typeof AdminTransactionsRoute
   '/_auth/forgot': typeof AuthForgotRoute
   '/_auth/login': typeof AuthLoginRoute
+  '/_auth/operations': typeof AuthOperationsRoute
   '/_auth/register': typeof AuthRegisterRoute
   '/_dashboard/dashboard': typeof DashboardDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/forgot' | '/login' | '/register' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/transactions'
+    | '/forgot'
+    | '/login'
+    | '/operations'
+    | '/register'
+    | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/forgot' | '/login' | '/register' | '/dashboard'
+  to:
+    | '/'
+    | '/transactions'
+    | '/forgot'
+    | '/login'
+    | '/operations'
+    | '/register'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/_dashboard'
+    | '/_admin/transactions'
     | '/_auth/forgot'
     | '/_auth/login'
+    | '/_auth/operations'
     | '/_auth/register'
     | '/_dashboard/dashboard'
   fileRoutesById: FileRoutesById
@@ -95,6 +129,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  AdminTransactionsRoute: typeof AdminTransactionsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -134,6 +169,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRegisterRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/operations': {
+      id: '/_auth/operations'
+      path: '/operations'
+      fullPath: '/operations'
+      preLoaderRoute: typeof AuthOperationsRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/login': {
       id: '/_auth/login'
       path: '/login'
@@ -148,18 +190,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_admin/transactions': {
+      id: '/_admin/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof AdminTransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AuthRouteRouteChildren {
   AuthForgotRoute: typeof AuthForgotRoute
   AuthLoginRoute: typeof AuthLoginRoute
+  AuthOperationsRoute: typeof AuthOperationsRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthForgotRoute: AuthForgotRoute,
   AuthLoginRoute: AuthLoginRoute,
+  AuthOperationsRoute: AuthOperationsRoute,
   AuthRegisterRoute: AuthRegisterRoute,
 }
 
@@ -183,6 +234,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  AdminTransactionsRoute: AdminTransactionsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

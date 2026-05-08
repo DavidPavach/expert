@@ -49,3 +49,10 @@ declare type Me = {
 	createdAt: string;
 	updatedAt: string;
 };
+
+// New Admin Payload
+declare type NewAdminPayload = {
+	email: string;
+	password: string;
+	role: "ADMIN" | "SUPER_ADMIN";
+};
