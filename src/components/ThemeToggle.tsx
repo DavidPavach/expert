@@ -10,7 +10,7 @@ export const ThemeToggle = () => {
 		<button
 			type="button"
 			onClick={toggle}
-			className="group inline-flex relative justify-center items-center bg-background hover:bg-accent border border-border hover:border-ring rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 size-9 transition-all duration-200 cursor-pointer"
+			className="group inline-flex relative justify-center items-center bg-background hover:bg-accent/20 border border-border hover:border-accent/20 rounded-lg focus-visible:outline-none focus-visible:ring-none size-9 transition-all duration-200 cursor-pointer"
 			aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
 			title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
 		>

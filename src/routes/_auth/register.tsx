@@ -10,6 +10,9 @@ export const Route = createFileRoute("/_auth/register")({
 			},
 		],
 	}),
+	validateSearch: (search: Record<string, unknown>) => ({
+		ref: search.ref as string | undefined,
+	}),
 	component: RouteComponent,
 });
 

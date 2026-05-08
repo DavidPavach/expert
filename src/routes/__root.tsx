@@ -12,7 +12,7 @@ interface MyRouterContext {
 	queryClient: QueryClient;
 }
 
-export const APP_NAME = "ExpertMirrorCon - Copy . AI . Bot";
+export const APP_NAME = "Expertmirrorcon - Copy . AI . Bot";
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	head: () => ({
 		meta: [
