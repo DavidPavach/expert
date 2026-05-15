@@ -1,13 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-
-import Dashboard from "@/pages/User/Dashboard";
+import Withdraw from "@/pages/User/Withdraw";
 import { APP_NAME } from "../__root";
 
-export const Route = createFileRoute("/_dashboard/dashboard")({
+export const Route = createFileRoute("/_dashboard/withdrawal")({
 	head: () => ({
 		meta: [
 			{
-				title: `Dashboard | ${APP_NAME}`,
+				title: `Withdrawal | ${APP_NAME}`,
 			},
 		],
 	}),
@@ -15,5 +14,5 @@ export const Route = createFileRoute("/_dashboard/dashboard")({
 });
 
 function RouteComponent() {
-	return <Dashboard />;
+	return <Withdraw />;
 }

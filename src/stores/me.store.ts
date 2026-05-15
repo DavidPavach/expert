@@ -11,7 +11,11 @@ type UserState = {
 
 	setUser: (user: Me) => void;
 	clearUser: () => void;
-	ensureUser: (queryClient?: QueryClient) => Promise<Me | null>;
+
+	ensureUser: (
+		queryClient?: QueryClient,
+		force?: boolean,
+	) => Promise<Me | null>;
 };
 
 export const useMeStore = create<UserState>((set, get) => ({
@@ -20,26 +24,38 @@ export const useMeStore = create<UserState>((set, get) => ({
 	error: null,
 
 	setUser: (user) => set({ user }),
-	clearUser: () => set({ user: null, error: null }),
 
-	ensureUser: async (queryClient) => {
-		// Return immediately if user is already in Zustand state
+	clearUser: () =>
+		set({
+			user: null,
+			error: null,
+		}),
+
+	ensureUser: async (queryClient, force = false) => {
 		const existing = get().user;
-		if (existing) return existing;
 
-		set({ loading: true, error: null });
+		// Skip only if user exists and force is false
+		if (existing && !force) {
+			return existing;
+		}
+
+		set({
+			loading: true,
+			error: null,
+		});
 
 		try {
-			// Try grabbing from TanStack Query cache using your exact queryKey
-			if (queryClient) {
+			// Try query cache first
+			if (queryClient && !force) {
 				const cached = queryClient.getQueryData<Me>(["me"]);
+
 				if (cached) {
 					set({ user: cached, loading: false });
 					return cached;
 				}
 			}
 
-			// Fallback to API if not in state or cache
+			// Fresh API request
 			const res = await currentUser();
 
 			if (res.status !== 200 || res.success !== true) {
@@ -48,11 +64,20 @@ export const useMeStore = create<UserState>((set, get) => ({
 
 			const userData = res.data;
 			set({ user: userData, loading: false });
+
+			// Sync query cache too
+			queryClient?.setQueryData(["me"], userData);
+
 			return userData;
 		} catch (err: unknown) {
 			const message =
 				err instanceof Error ? err.message : "An unknown error occurred";
-			set({ error: message, loading: false });
+
+			set({
+				error: message,
+				loading: false,
+			});
+
 			return null;
 		}
 	},

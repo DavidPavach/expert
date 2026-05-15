@@ -111,7 +111,7 @@ export default function CountrySelect({
 							animate={{ opacity: 1, y: 0 }}
 							exit={{ opacity: 0, y: -10 }}
 							transition={{ duration: 0.2, ease: "easeOut" }}
-							className="top-full left-0 z-20 absolute flex flex-col bg-background shadow-lg mt-2 border border-border rounded-xl w-full overflow-hidden"
+							className="top-full left-0 z-10 absolute flex flex-col bg-background shadow-lg mt-2 border border-border rounded-xl w-full overflow-hidden"
 						>
 							{/* Search Input */}
 							<div className="p-2 border-border border-b">

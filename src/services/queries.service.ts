@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 // API endpoints
-import { currentUser } from "./api.service";
+import { currentUser, fetchPrices, fetchSettings } from "./api.service";
 
 // Stores
 
@@ -10,5 +10,21 @@ export function useCurrentUser() {
 	return useQuery({
 		queryKey: ["me"],
 		queryFn: () => currentUser(),
+	});
+}
+
+// Get Prices
+export function useFetchPrices() {
+	return useQuery({
+		queryKey: ["prices"],
+		queryFn: () => fetchPrices(),
+	});
+}
+
+// Get Settings
+export function useSettings() {
+	return useQuery({
+		queryKey: ["settings"],
+		queryFn: () => fetchSettings(),
 	});
 }

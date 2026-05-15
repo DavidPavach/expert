@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import Dashboard from "@/pages/User/Dashboard";
+import Deposit from "@/pages/User/Deposit";
 import { APP_NAME } from "../__root";
 
-export const Route = createFileRoute("/_dashboard/dashboard")({
+export const Route = createFileRoute("/_dashboard/deposit")({
 	head: () => ({
 		meta: [
 			{
-				title: `Dashboard | ${APP_NAME}`,
+				title: `Deposit | ${APP_NAME}`,
 			},
 		],
 	}),
@@ -15,5 +15,5 @@ export const Route = createFileRoute("/_dashboard/dashboard")({
 });
 
 function RouteComponent() {
-	return <Dashboard />;
+	return <Deposit />;
 }

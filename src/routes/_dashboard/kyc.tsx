@@ -1,13 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-
-import Dashboard from "@/pages/User/Dashboard";
 import { APP_NAME } from "../__root";
 
-export const Route = createFileRoute("/_dashboard/dashboard")({
+export const Route = createFileRoute("/_dashboard/kyc")({
 	head: () => ({
 		meta: [
 			{
-				title: `Dashboard | ${APP_NAME}`,
+				title: `KYC | ${APP_NAME}`,
 			},
 		],
 	}),
@@ -15,5 +13,5 @@ export const Route = createFileRoute("/_dashboard/dashboard")({
 });
 
 function RouteComponent() {
-	return <Dashboard />;
+	return <div>Hello "/_dashboard/kyc"!</div>;
 }

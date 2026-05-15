@@ -2,9 +2,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Stores
 import { useMeStore } from "#/stores/me.store";
-
+import { useSettingsStore } from "#/stores/settings.store";
 // APIs
-import { authAdmin, authUser, createUser, newAdmin } from "./api.service";
+import {
+	authAdmin,
+	authUser,
+	createUser,
+	newAdmin,
+	updateProfile,
+} from "./api.service";
 
 // Create User
 export function useCreateUser() {
@@ -31,21 +37,7 @@ export function useAuth() {
 		onSuccess: async () => {
 			queryClient.invalidateQueries();
 			useMeStore.getState().ensureUser(queryClient);
-		},
-	});
-}
-
-// New Admin
-export function useNewAdmin() {
-	const queryClient = useQueryClient();
-
-	return useMutation({
-		mutationFn: (data: NewAdminPayload) => newAdmin(data),
-		onError: (error) => {
-			console.error("Admin Creation failed:", error);
-		},
-		onSuccess: async () => {
-			queryClient.invalidateQueries();
+			useSettingsStore.getState().ensureSettings(queryClient);
 		},
 	});
 }
@@ -60,6 +52,37 @@ export function useAuthAdmin() {
 		},
 		onSuccess: async () => {
 			queryClient.invalidateQueries();
+		},
+	});
+}
+
+// New Admin
+export function useNewAdmin() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (data: NewAdminPayload) => newAdmin(data),
+		onError: (error) => {
+			console.error("Admin Creation failed:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["admins"] });
+		},
+	});
+}
+
+// User Profile
+export function useUpdateProfile() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (data: UserPayload) => updateProfile(data),
+		onError: (error) => {
+			console.error("User Update failed:", error);
+		},
+		onSuccess: async () => {
+			queryClient.invalidateQueries({ queryKey: ["me"] });
+			useMeStore.getState().ensureUser(queryClient, true);
 		},
 	});
 }

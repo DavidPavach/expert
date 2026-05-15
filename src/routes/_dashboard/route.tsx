@@ -1,9 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_dashboard')({
-  component: RouteComponent,
-})
+// Layout
+import UserLayout from "@/layouts/UserLayout";
 
-function RouteComponent() {
-  return <div>Hello "/_dashboard"!</div>
+export const Route = createFileRoute("/_dashboard")({
+	component: UserLayoutWrapper,
+});
+
+function UserLayoutWrapper() {
+	return (
+		<UserLayout>
+			<Outlet />
+		</UserLayout>
+	);
 }

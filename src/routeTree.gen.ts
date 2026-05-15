@@ -12,9 +12,16 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteRouteImport } from './routes/_dashboard/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardWithdrawalRouteImport } from './routes/_dashboard/withdrawal'
+import { Route as DashboardSectionRouteImport } from './routes/_dashboard/section'
+import { Route as DashboardProfileRouteImport } from './routes/_dashboard/profile'
+import { Route as DashboardKycRouteImport } from './routes/_dashboard/kyc'
+import { Route as DashboardDepositRouteImport } from './routes/_dashboard/deposit'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard/dashboard'
+import { Route as DashboardCopyRouteImport } from './routes/_dashboard/copy'
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthOperationsRouteImport } from './routes/_auth/operations'
+import { Route as AuthLogoutRouteImport } from './routes/_auth/logout'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotRouteImport } from './routes/_auth/forgot'
 import { Route as AdminTransactionsRouteImport } from './routes/_admin/transactions'
@@ -32,9 +39,39 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardWithdrawalRoute = DashboardWithdrawalRouteImport.update({
+  id: '/withdrawal',
+  path: '/withdrawal',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardSectionRoute = DashboardSectionRouteImport.update({
+  id: '/section',
+  path: '/section',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardProfileRoute = DashboardProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardKycRoute = DashboardKycRouteImport.update({
+  id: '/kyc',
+  path: '/kyc',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardDepositRoute = DashboardDepositRouteImport.update({
+  id: '/deposit',
+  path: '/deposit',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardDashboardRoute = DashboardDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardCopyRoute = DashboardCopyRouteImport.update({
+  id: '/copy',
+  path: '/copy',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
@@ -45,6 +82,11 @@ const AuthRegisterRoute = AuthRegisterRouteImport.update({
 const AuthOperationsRoute = AuthOperationsRouteImport.update({
   id: '/operations',
   path: '/operations',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthLogoutRoute = AuthLogoutRouteImport.update({
+  id: '/logout',
+  path: '/logout',
   getParentRoute: () => AuthRouteRoute,
 } as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
@@ -68,18 +110,32 @@ export interface FileRoutesByFullPath {
   '/transactions': typeof AdminTransactionsRoute
   '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
+  '/logout': typeof AuthLogoutRoute
   '/operations': typeof AuthOperationsRoute
   '/register': typeof AuthRegisterRoute
+  '/copy': typeof DashboardCopyRoute
   '/dashboard': typeof DashboardDashboardRoute
+  '/deposit': typeof DashboardDepositRoute
+  '/kyc': typeof DashboardKycRoute
+  '/profile': typeof DashboardProfileRoute
+  '/section': typeof DashboardSectionRoute
+  '/withdrawal': typeof DashboardWithdrawalRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/transactions': typeof AdminTransactionsRoute
   '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
+  '/logout': typeof AuthLogoutRoute
   '/operations': typeof AuthOperationsRoute
   '/register': typeof AuthRegisterRoute
+  '/copy': typeof DashboardCopyRoute
   '/dashboard': typeof DashboardDashboardRoute
+  '/deposit': typeof DashboardDepositRoute
+  '/kyc': typeof DashboardKycRoute
+  '/profile': typeof DashboardProfileRoute
+  '/section': typeof DashboardSectionRoute
+  '/withdrawal': typeof DashboardWithdrawalRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,9 +145,16 @@ export interface FileRoutesById {
   '/_admin/transactions': typeof AdminTransactionsRoute
   '/_auth/forgot': typeof AuthForgotRoute
   '/_auth/login': typeof AuthLoginRoute
+  '/_auth/logout': typeof AuthLogoutRoute
   '/_auth/operations': typeof AuthOperationsRoute
   '/_auth/register': typeof AuthRegisterRoute
+  '/_dashboard/copy': typeof DashboardCopyRoute
   '/_dashboard/dashboard': typeof DashboardDashboardRoute
+  '/_dashboard/deposit': typeof DashboardDepositRoute
+  '/_dashboard/kyc': typeof DashboardKycRoute
+  '/_dashboard/profile': typeof DashboardProfileRoute
+  '/_dashboard/section': typeof DashboardSectionRoute
+  '/_dashboard/withdrawal': typeof DashboardWithdrawalRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -100,18 +163,32 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/forgot'
     | '/login'
+    | '/logout'
     | '/operations'
     | '/register'
+    | '/copy'
     | '/dashboard'
+    | '/deposit'
+    | '/kyc'
+    | '/profile'
+    | '/section'
+    | '/withdrawal'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/transactions'
     | '/forgot'
     | '/login'
+    | '/logout'
     | '/operations'
     | '/register'
+    | '/copy'
     | '/dashboard'
+    | '/deposit'
+    | '/kyc'
+    | '/profile'
+    | '/section'
+    | '/withdrawal'
   id:
     | '__root__'
     | '/'
@@ -120,9 +197,16 @@ export interface FileRouteTypes {
     | '/_admin/transactions'
     | '/_auth/forgot'
     | '/_auth/login'
+    | '/_auth/logout'
     | '/_auth/operations'
     | '/_auth/register'
+    | '/_dashboard/copy'
     | '/_dashboard/dashboard'
+    | '/_dashboard/deposit'
+    | '/_dashboard/kyc'
+    | '/_dashboard/profile'
+    | '/_dashboard/section'
+    | '/_dashboard/withdrawal'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -155,11 +239,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_dashboard/withdrawal': {
+      id: '/_dashboard/withdrawal'
+      path: '/withdrawal'
+      fullPath: '/withdrawal'
+      preLoaderRoute: typeof DashboardWithdrawalRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/section': {
+      id: '/_dashboard/section'
+      path: '/section'
+      fullPath: '/section'
+      preLoaderRoute: typeof DashboardSectionRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/profile': {
+      id: '/_dashboard/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof DashboardProfileRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/kyc': {
+      id: '/_dashboard/kyc'
+      path: '/kyc'
+      fullPath: '/kyc'
+      preLoaderRoute: typeof DashboardKycRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/deposit': {
+      id: '/_dashboard/deposit'
+      path: '/deposit'
+      fullPath: '/deposit'
+      preLoaderRoute: typeof DashboardDepositRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/_dashboard/dashboard': {
       id: '/_dashboard/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardDashboardRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/copy': {
+      id: '/_dashboard/copy'
+      path: '/copy'
+      fullPath: '/copy'
+      preLoaderRoute: typeof DashboardCopyRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/_auth/register': {
@@ -174,6 +300,13 @@ declare module '@tanstack/react-router' {
       path: '/operations'
       fullPath: '/operations'
       preLoaderRoute: typeof AuthOperationsRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/logout': {
+      id: '/_auth/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof AuthLogoutRouteImport
       parentRoute: typeof AuthRouteRoute
     }
     '/_auth/login': {
@@ -203,6 +336,7 @@ declare module '@tanstack/react-router' {
 interface AuthRouteRouteChildren {
   AuthForgotRoute: typeof AuthForgotRoute
   AuthLoginRoute: typeof AuthLoginRoute
+  AuthLogoutRoute: typeof AuthLogoutRoute
   AuthOperationsRoute: typeof AuthOperationsRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
 }
@@ -210,6 +344,7 @@ interface AuthRouteRouteChildren {
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthForgotRoute: AuthForgotRoute,
   AuthLoginRoute: AuthLoginRoute,
+  AuthLogoutRoute: AuthLogoutRoute,
   AuthOperationsRoute: AuthOperationsRoute,
   AuthRegisterRoute: AuthRegisterRoute,
 }
@@ -219,11 +354,23 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface DashboardRouteRouteChildren {
+  DashboardCopyRoute: typeof DashboardCopyRoute
   DashboardDashboardRoute: typeof DashboardDashboardRoute
+  DashboardDepositRoute: typeof DashboardDepositRoute
+  DashboardKycRoute: typeof DashboardKycRoute
+  DashboardProfileRoute: typeof DashboardProfileRoute
+  DashboardSectionRoute: typeof DashboardSectionRoute
+  DashboardWithdrawalRoute: typeof DashboardWithdrawalRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardCopyRoute: DashboardCopyRoute,
   DashboardDashboardRoute: DashboardDashboardRoute,
+  DashboardDepositRoute: DashboardDepositRoute,
+  DashboardKycRoute: DashboardKycRoute,
+  DashboardProfileRoute: DashboardProfileRoute,
+  DashboardSectionRoute: DashboardSectionRoute,
+  DashboardWithdrawalRoute: DashboardWithdrawalRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(

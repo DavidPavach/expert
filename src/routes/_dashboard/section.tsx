@@ -1,13 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-
-import Dashboard from "@/pages/User/Dashboard";
+import LiveSection from "@/pages/User/LiveSection";
 import { APP_NAME } from "../__root";
 
-export const Route = createFileRoute("/_dashboard/dashboard")({
+export const Route = createFileRoute("/_dashboard/section")({
 	head: () => ({
 		meta: [
 			{
-				title: `Dashboard | ${APP_NAME}`,
+				title: `Live Section | ${APP_NAME}`,
 			},
 		],
 	}),
@@ -15,5 +14,5 @@ export const Route = createFileRoute("/_dashboard/dashboard")({
 });
 
 function RouteComponent() {
-	return <Dashboard />;
+	return <LiveSection />;
 }

@@ -15,6 +15,12 @@ export const authUser = async (data: AuthPayload) => {
 	return response.data;
 };
 
+// Logout User
+export const logoutUser = async () => {
+	const response = await axiosInstance.post(`auth/logout`);
+	return response.data;
+};
+
 // Fetch Current User
 export const currentUser = async () => {
 	const response = await axiosInstance.get("users/fetch");
@@ -30,5 +36,31 @@ export const newAdmin = async (data: NewAdminPayload) => {
 // Auth Admin
 export const authAdmin = async (data: AuthPayload) => {
 	const response = await axiosInstance.post("auth/operations", data);
+	return response.data;
+};
+
+// Fetch Prices
+export const fetchPrices = async () => {
+	const response = await axiosInstance.get("transactions/prices");
+	return response.data;
+};
+
+// Fetch Settings
+export const fetchSettings = async () => {
+	const response = await axiosInstance.get("settings/get");
+	return response.data;
+};
+
+// Update Profile
+export const updateProfile = async (data: UserPayload) => {
+	const response = await axiosInstance.patch("users/update", data);
+	return response.data;
+};
+
+// Presigned URL
+export const fetchPresignedUrl = async (data: PresignedPayload[]) => {
+	const response = await axiosInstance.post("general/presigned", {
+		items: data,
+	});
 	return response.data;
 };

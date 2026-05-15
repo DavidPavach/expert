@@ -1,95 +1,120 @@
 import { useState } from "react";
-
-// Helper to generate SHA-256 hash of a file in the browser
-const computeSHA256 = async (file: File): Promise<string> => {
-	const buffer = await file.arrayBuffer();
-	const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-	const hashArray = Array.from(new Uint8Array(hashBuffer));
-	return btoa(String.fromCharCode(...hashArray));
-};
+import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "#/enum";
+import { fetchPresignedUrl } from "@/services/api.service";
 
 type UploadStatus = "idle" | "preparing" | "uploading" | "success" | "error";
 
+type UploadResult = {
+	urls: string[];
+};
+
 export const useS3Upload = () => {
 	const [status, setStatus] = useState<UploadStatus>("idle");
+	const [progress, setProgress] = useState<number>(0);
 	const [progressText, setProgressText] = useState<string>("");
 	const [error, setError] = useState<string | null>(null);
 
-	const uploadFiles = async (files: File[]) => {
-		setStatus("preparing");
+	const reset = () => {
+		setStatus("idle");
+		setProgress(0);
+		setProgressText("");
 		setError(null);
-		setProgressText("Preparing files for secure upload...");
+	};
 
+	const validateFiles = (files: File[]) => {
+		for (const file of files) {
+			if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+				throw new Error(`${file.name} is not a supported image type`);
+			}
+
+			if (file.size > MAX_FILE_SIZE) {
+				throw new Error(`${file.name} exceeds 50MB limit`);
+			}
+		}
+	};
+
+	const uploadFiles = async (files: File[]): Promise<UploadResult> => {
 		try {
-			// Generate checksums for all files
-			const fileDataList = await Promise.all(
-				files.map(async (file) => ({
-					contentType: file.type,
-					fileSize: file.size,
-					fileName: file.name,
-					checksum: await computeSHA256(file),
-					originalFile: file,
-				})),
+			reset();
+
+			if (!files.length) {
+				throw new Error("No files selected");
+			}
+
+			validateFiles(files);
+
+			setStatus("preparing");
+			setProgressText("Preparing secure upload...");
+
+			const preparedFiles = await Promise.all(
+				files.map(async (file) => {
+					return {
+						file,
+						payload: {
+							contentType: file.type,
+							fileSize: file.size,
+							fileName: file.name,
+						} satisfies PresignedPayload,
+					};
+				}),
 			);
 
-			// Get Presigned URLs
-			setProgressText("Requesting secure upload links...");
-			const presignResponse = await fetch("/api/upload/presign", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					// Send everything except the actual file
-					items: fileDataList.map(({ originalFile, ...rest }) => rest),
+			// Fetch all presigned URLs
+			const presignedResponses = await Promise.all(
+				preparedFiles.map(async ({ payload }) => {
+					return fetchPresignedUrl([payload]);
 				}),
-			});
+			);
 
-			if (!presignResponse.ok)
-				throw new Error("Failed to get upload URLs from server");
-			const { items: presignedUrls } = await presignResponse.json();
-
-			// Upload each file directly to AWS S3 using the presigned URLs
 			setStatus("uploading");
-			setProgressText(`Uploading 0 of ${files.length} files...`);
 
-			const uploadedPublicUrls: string[] = [];
+			const uploadedUrls: string[] = [];
 
-			for (let i = 0; i < fileDataList.length; i++) {
-				const file = fileDataList[i].originalFile;
-				const uploadData = presignedUrls[i];
+			for (let i = 0; i < preparedFiles.length; i++) {
+				const current = preparedFiles[i];
+				const presigned = presignedResponses[i].data;
 
-				const uploadResponse = await fetch(uploadData.uploadUrl, {
+				setProgressText(`Uploading ${i + 1} of ${preparedFiles.length}`);
+
+				const uploadResponse = await fetch(presigned[i].uploadUrl, {
 					method: "PUT",
-					headers: {
-						"Content-Type": file.type,
-						"x-amz-checksum-sha256": fileDataList[i].checksum,
-					},
-					body: file,
+					body: current.file,
 				});
 
-				if (!uploadResponse.ok)
-					throw new Error(`Failed to upload ${file.name} to S3`);
+				if (!uploadResponse.ok) {
+					throw new Error(`Failed to upload ${current.file.name}`);
+				}
 
-				uploadedPublicUrls.push(uploadData.publicUrl);
-				setProgressText(`Uploading ${i + 1} of ${files.length} files...`);
+				uploadedUrls.push(presigned[i].publicUrl);
+
+				setProgress(Math.round(((i + 1) / preparedFiles.length) * 100));
 			}
 
 			setStatus("success");
-			setProgressText("All files uploaded successfully!");
+			setProgressText("Upload completed");
 
-			// Return the final URL
-			return uploadedPublicUrls;
+			return {
+				urls: uploadedUrls,
+			};
 		} catch (err: unknown) {
-			console.error(err);
+			console.error("Presigned URL", err);
+
+			const message = err instanceof Error ? err.message : "Upload failed";
+
 			setStatus("error");
-			const errorMessage =
-				err instanceof Error
-					? err.message
-					: "An unknown error occurred during upload";
-			setError(errorMessage);
+			setError(message);
 			setProgressText("");
+
 			throw err;
 		}
 	};
 
-	return { uploadFiles, status, progressText, error };
+	return {
+		uploadFiles,
+		reset,
+		status,
+		progress,
+		progressText,
+		error,
+	};
 };

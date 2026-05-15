@@ -40,12 +40,14 @@ declare type Me = {
 	email: string;
 	phoneNumber: string;
 	country: string;
+	bare: string;
 	profilePicture: string;
 	lastSession?: string;
 	suspended: boolean;
 	suspendedDate?: string;
 	suspensionDuration?: number;
 	withdrawalKey: string;
+	kycStatus: "PENDING" | "APPROVED" | "REJECTED" | "NOT STARTED";
 	createdAt: string;
 	updatedAt: string;
 };
@@ -55,4 +57,49 @@ declare type NewAdminPayload = {
 	email: string;
 	password: string;
 	role: "ADMIN" | "SUPER_ADMIN";
+};
+
+// Settings
+declare interface DepositCoin {
+	coinName: string;
+	symbol: string;
+	qrCode: string;
+	walletAddress: string;
+}
+
+declare interface WithdrawalCoin {
+	coinName: string;
+	symbol: string;
+}
+
+declare interface Settings {
+	_id: string;
+	isGlobal: boolean;
+	threshold: number;
+	whatsAppNumber: string;
+	address: string;
+	thresholdText: string;
+	depositCoins: DepositCoin[];
+	withdrawalCoins: WithdrawalCoin[];
+	minDeposit: number;
+	minWithdrawal: number;
+	noWithdrawal: boolean;
+	createdAt: string;
+	updatedAt: string;
+}
+
+// User Profile
+declare type UserPayload = {
+	fullName?: string;
+	phoneNumber?: string;
+	country?: string;
+	password?: string;
+	profilePicture?: string;
+};
+
+// Presigned Url
+declare type PresignedPayload = {
+	contentType: string;
+	fileSize: number;
+	fileName: string;
 };
