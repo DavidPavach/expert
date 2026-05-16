@@ -12,9 +12,13 @@ import {
 	ShieldSecurity,
 	TickCircle,
 } from "iconsax-reactjs";
+import { Loader } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "react-fox-toast";
+import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "#/enum";
+import { useNewTx } from "#/services/mutations.service";
 import { useSettingsStore } from "#/stores/settings.store";
+import { useS3Upload } from "@/hooks/useS3Upload";
 import { formatCurrency } from "@/utils/format";
 
 const STEPS = [
@@ -64,6 +68,7 @@ const FEATURES = [
 
 type CompleteProps = {
 	coin: string;
+	symbol: string;
 	amount: number;
 	closeModal: () => void;
 };
@@ -71,36 +76,29 @@ type CompleteProps = {
 export default function CompleteDeposit({
 	coin,
 	amount,
+	symbol,
 	closeModal,
 }: CompleteProps) {
 	const { settings } = useSettingsStore();
 
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const [proofFile, setProofFile] = useState<File | null>(null);
-	const [copied, setCopied] = useState<boolean>(false);
+	const [selectedImage, setSelectedImage] = useState<string | null>(null);
+	const [loading, setLoading] = useState<boolean>(false);
 
-	if (!settings) {
+	const [copied, setCopied] = useState<boolean>(false);
+	const newTx = useNewTx();
+	const { uploadFiles } = useS3Upload();
+
+	if (!settings || !coin.trim() || !amount || !symbol.trim()) {
 		closeModal();
 		return toast.error("Something went wrong, kindly restart the process");
 	}
-	// settings.depositCoins ||
-	const depositCoins = [
-		{
-			coinName: "ethereum",
-			symbol: "ETH",
-			qrCode: "/sample.jpeg",
-			walletAddress: "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kygt080",
-		},
-		{
-			coinName: "bitcoin",
-			symbol: "BTC",
-			qrCode: "/sample1.jpeg",
-			walletAddress: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
-		},
-	];
+	const depositCoins = settings.depositCoins || [];
 	const COIN_DETAILS = depositCoins.find((c) => c.coinName === coin);
-	console.log("Coin details", coin, amount);
 
+	// Functions
+	const toggleLoading = () => setLoading((prev) => !prev);
 	const handleCopy = async () => {
 		if (!COIN_DETAILS) return toast.error("Couldn't copy wallet address");
 		await navigator.clipboard.writeText(COIN_DETAILS.walletAddress);
@@ -110,6 +108,71 @@ export default function CompleteDeposit({
 		setTimeout(() => {
 			setCopied(false);
 		}, 2000);
+	};
+
+	const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+
+		if (!file) return;
+
+		if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+			toast.error("Only valid image formats are allowed.");
+			e.target.value = "";
+			return;
+		}
+
+		if (file.size > MAX_FILE_SIZE) {
+			toast.error("Image must be less than 50MB.");
+			e.target.value = "";
+			return;
+		}
+
+		setProofFile(file);
+		const imageUrl = URL.createObjectURL(file);
+
+		setSelectedImage((prev) => {
+			if (prev) {
+				URL.revokeObjectURL(prev);
+			}
+			return imageUrl;
+		});
+
+		e.target.value = "";
+	};
+
+	const handleSubmit = async () => {
+		if (!proofFile) return toast.error("Kindly attach your Payment Proof");
+
+		try {
+			toggleLoading();
+			const result = await uploadFiles([proofFile]);
+			const hash = result.urls[0];
+
+			const payload = {
+				type: "DEPOSIT",
+				cryptoSymbol: `${coin} ${symbol}`,
+				amount,
+				hash,
+			};
+
+			newTx.mutate(payload, {
+				onSuccess: () => {
+					toast.success("Your Deposit is processing and currently pending");
+					closeModal();
+				},
+				// biome-ignore lint/suspicious/noExplicitAny: false positive
+				onError: (error: any) => {
+					const message =
+						error?.response?.data?.message ||
+						"Failed to Process Deposit, Please Try Again.";
+					toast.error(message);
+					toggleLoading();
+				},
+			});
+		} catch (error) {
+			console.error(error);
+			toast.error("Failed to Process Deposit, Please Try Again.");
+		}
 	};
 
 	return (
@@ -349,13 +412,8 @@ export default function CompleteDeposit({
 										ref={fileInputRef}
 										type="file"
 										hidden
-										accept="image/*"
-										onChange={(e) => {
-											const file = e.target.files?.[0];
-											if (file) {
-												setProofFile(file);
-											}
-										}}
+										accept=".jpg,.jpeg,.png,.gif,.webp,.svg"
+										onChange={handleImageChange}
 									/>
 
 									<button
@@ -363,12 +421,20 @@ export default function CompleteDeposit({
 										onClick={() => fileInputRef.current?.click()}
 										className="group flex flex-col justify-center items-center gap-y-3 hover:bg-primary/5 px-4 md:px-5 xl:px-6 border-2 border-border border-dashed rounded-3xl w-full h-60 transition-all duration-300 cursor-pointer"
 									>
-										<div className="flex justify-center items-center bg-primary/10 group-hover:bg-primary/20 rounded-full size-20 transition-all duration-300">
-											<DocumentUpload
-												className="size-9 text-primary"
-												variant="Bulk"
+										{selectedImage ? (
+											<img
+												src={selectedImage}
+												alt="Proof"
+												className="rounded-xl size-24 md:size-28 xl:size-32"
 											/>
-										</div>
+										) : (
+											<div className="flex justify-center items-center bg-primary/10 group-hover:bg-primary/20 rounded-full size-20 transition-all duration-300">
+												<DocumentUpload
+													className="size-9 text-primary"
+													variant="Bulk"
+												/>
+											</div>
+										)}
 
 										<div>
 											<p className="font-semibold text-sm md:text-base xl:text-lg">
@@ -389,14 +455,22 @@ export default function CompleteDeposit({
 						{/* Submit */}
 						<div className="mt-6">
 							<button
+								onClick={handleSubmit}
+								disabled={newTx.isPending || !proofFile || loading}
 								type="button"
-								className="group flex justify-center items-center gap-x-3 bg-green-600 hover:bg-green-700 py-4 rounded-2xl w-full font-semibold text-white transition-all duration-300 cursor-pointer"
+								className="group flex justify-center items-center gap-x-3 bg-green-600 hover:bg-green-700 disabled:opacity-50 py-4 rounded-2xl w-full font-semibold text-white transition-all duration-300 cursor-pointer"
 							>
-								<Send2
-									className="size-5 transition-all group-hover:translate-x-1 duration-300"
-									variant="Outline"
-								/>
-								Submit Payment Proof
+								{newTx.isPending || loading ? (
+									<Loader className="size-4 md:size-4.5 xl:size-5 animate-spin" />
+								) : (
+									<>
+										<Send2
+											className="size-5 transition-all group-hover:translate-x-1 duration-300"
+											variant="Outline"
+										/>
+										Submit Payment Proof
+									</>
+								)}
 							</button>
 
 							<div className="flex justify-center items-center gap-x-2 mt-5 text-[11px] text-muted-foreground md:text-xs xl:text-sm">

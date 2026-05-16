@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
+import { useBalanceStore } from "#/stores/dashboard.store";
 // Stores
 import { useMeStore } from "#/stores/me.store";
 import { useSettingsStore } from "#/stores/settings.store";
@@ -9,6 +9,7 @@ import {
 	authUser,
 	createUser,
 	newAdmin,
+	newTransaction,
 	updateProfile,
 } from "./api.service";
 
@@ -83,6 +84,23 @@ export function useUpdateProfile() {
 		onSuccess: async () => {
 			queryClient.invalidateQueries({ queryKey: ["me"] });
 			useMeStore.getState().ensureUser(queryClient, true);
+		},
+	});
+}
+
+// New Transaction
+export function useNewTx() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (data: NewTxPayload) => newTransaction(data),
+		onError: (error) => {
+			console.error("New Transaction failed:", error);
+		},
+		onSuccess: async () => {
+			queryClient.invalidateQueries({ queryKey: ["myTransactions"] });
+			queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+			useBalanceStore.getState().ensureStats(queryClient, true);
 		},
 	});
 }

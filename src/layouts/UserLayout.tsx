@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import Header from "#/components/Header";
 import { BottomNav, SideNav } from "#/components/Nav";
+import { useBalanceStore } from "#/stores/dashboard.store";
 import { useMeStore } from "#/stores/me.store";
 import { useSettingsStore } from "#/stores/settings.store";
 
@@ -13,6 +14,7 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
 		const init = async () => {
 			await useMeStore.getState().ensureUser(queryClient);
 			await useSettingsStore.getState().ensureSettings(queryClient);
+			await useBalanceStore.getState().ensureStats(queryClient);
 		};
 
 		init();

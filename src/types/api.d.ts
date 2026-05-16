@@ -103,3 +103,21 @@ declare type PresignedPayload = {
 	fileSize: number;
 	fileName: string;
 };
+
+// Transactions
+declare type NewTxPayload = {
+	type: string;
+	cryptoSymbol: string;
+	amount: number;
+	hash?: string;
+	walletAddress?: string;
+};
+
+// Dashboard
+declare type DashboardStats = {
+	approvedDeposits: number;
+	approvedBonuses: number;
+	totalWithdrawals: number;
+	approvedPenalties: number;
+	availableBalance: number;
+};

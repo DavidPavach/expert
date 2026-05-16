@@ -1,7 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 
 // API endpoints
-import { currentUser, fetchPrices, fetchSettings } from "./api.service";
+import {
+	currentUser,
+	dashboardStats,
+	fetchPrices,
+	fetchSettings,
+} from "./api.service";
 
 // Stores
 
@@ -26,5 +31,13 @@ export function useSettings() {
 	return useQuery({
 		queryKey: ["settings"],
 		queryFn: () => fetchSettings(),
+	});
+}
+
+// Get Dashboard Stats
+export function useDashboard() {
+	return useQuery({
+		queryKey: ["dashboard"],
+		queryFn: () => dashboardStats(),
 	});
 }

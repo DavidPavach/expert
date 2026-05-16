@@ -98,7 +98,9 @@ export const Overlay = ({
 						className={getVariantClass(variant)}
 						onClick={(e) => e.stopPropagation()}
 					>
-						<div className="bg-card shadow-lg mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full overflow-y-auto text-card-foreground hide-scrollbar">
+						<div
+							className={`${variant === "bottom" ? "rounded-t-2xl" : "rounded-2xl"} bg-card shadow-lg mx-auto p-4 md:p-6 xl:p-8 border border-border  w-full overflow-y-auto text-card-foreground hide-scrollbar`}
+						>
 							{children}
 						</div>
 					</motion.div>

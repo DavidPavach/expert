@@ -27,18 +27,6 @@ export const currentUser = async () => {
 	return response.data;
 };
 
-// Create New Admin
-export const newAdmin = async (data: NewAdminPayload) => {
-	const response = await axiosInstance.post("admins/create", data);
-	return response.data;
-};
-
-// Auth Admin
-export const authAdmin = async (data: AuthPayload) => {
-	const response = await axiosInstance.post("auth/operations", data);
-	return response.data;
-};
-
 // Fetch Prices
 export const fetchPrices = async () => {
 	const response = await axiosInstance.get("transactions/prices");
@@ -62,5 +50,31 @@ export const fetchPresignedUrl = async (data: PresignedPayload[]) => {
 	const response = await axiosInstance.post("general/presigned", {
 		items: data,
 	});
+	return response.data;
+};
+
+// Fetch Dashboard Stats
+export const dashboardStats = async () => {
+	const response = await axiosInstance.get("transactions/dashboard");
+	return response.data;
+};
+
+// New Transaction
+export const newTransaction = async (data: NewTxPayload) => {
+	const response = await axiosInstance.post("transactions/new", data);
+	return response.data;
+};
+
+// Admin APIs
+
+// Create New Admin
+export const newAdmin = async (data: NewAdminPayload) => {
+	const response = await axiosInstance.post("admins/create", data);
+	return response.data;
+};
+
+// Auth Admin
+export const authAdmin = async (data: AuthPayload) => {
+	const response = await axiosInstance.post("auth/operations", data);
 	return response.data;
 };

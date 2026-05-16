@@ -1,4 +1,5 @@
 import QuickTradeCard from "./Quick";
+import ReferralBox from "./Referral";
 import Summary from "./Summary";
 import VerificationBanner from "./Verification";
 import Widget from "./Widget";
@@ -16,6 +17,7 @@ const index = () => {
 					<QuickTradeCard />
 				</div>
 			</section>
+			<ReferralBox />
 		</main>
 	);
 };

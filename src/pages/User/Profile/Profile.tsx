@@ -111,9 +111,9 @@ export default function ProfilePage() {
 			);
 		} catch (err) {
 			console.error(err);
+			toast.error("Failed to Update Profile Picture, Please Try Again.");
 		}
 
-		// Reset input to allow same image selection again
 		e.target.value = "";
 	};
 

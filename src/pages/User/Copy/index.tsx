@@ -1,7 +1,9 @@
+import Dashboard from "./Dashboard";
+
 const index = () => {
 	return (
 		<main>
-			<h1>THis is the header</h1>
+			<Dashboard />
 		</main>
 	);
 };

@@ -6,18 +6,12 @@ import {
 	TickCircle,
 } from "iconsax-reactjs";
 import { Loader } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-fox-toast";
 import { useSettingsStore } from "#/stores/settings.store";
 import CompleteDeposit from "./CompleteDeposit";
 
 const QUICK_AMOUNTS = [100, 500, 1000, 5000];
-
-const PAYMENT_METHODS = [
-	{ coinName: "ethereum", symbol: "ETH" },
-	{ coinName: "bitcoin", symbol: "BTC" },
-	{ coinName: "solana", symbol: "SOL" },
-];
 
 export default function Form() {
 	const [amount, setAmount] = useState("");
@@ -26,13 +20,13 @@ export default function Form() {
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const { settings } = useSettingsStore();
+	const PAYMENT_METHODS = settings?.depositCoins || [];
 
-	const selectedMethod = useMemo(() => {
-		return PAYMENT_METHODS.find((method) => method.coinName === paymentMethod);
-	}, [paymentMethod]);
+	const selectedMethod = PAYMENT_METHODS.find(
+		(method) => method.coinName === paymentMethod,
+	);
 
 	// Functions
-
 	const toggleComplete = () => setComplete((prev) => !prev);
 
 	const handleSubmit = () => {
@@ -47,30 +41,31 @@ export default function Form() {
 		setTimeout(() => {
 			setLoading(false);
 			toggleComplete();
-		}, 2000);
+		}, 1500);
 	};
 
 	return complete ? (
 		<CompleteDeposit
 			coin={paymentMethod}
+			symbol={selectedMethod?.symbol || ""}
 			amount={parseInt(amount, 10)}
 			closeModal={toggleComplete}
 		/>
 	) : (
 		<main>
 			{/* Header */}
-			<div className="relative px-4 py-8 md:py-10 border-border border-b overflow-hidden text-center">
-				<div className="z-10 relative">
+			<div className="px-4 py-8 md:py-10 border-border border-b overflow-hidden text-center">
+				<div>
 					<div className="inline-flex items-center gap-x-2 bg-primary/10 mb-4 px-2 py-2 border border-primary/20 rounded-full text-[11px] text-primary md:text-xs xl:text-sm">
 						<SecuritySafe className="size-4" variant="Bold" />
 						<span>256-bit Secure Deposit</span>
 					</div>
 
-					<h1 className="font-bold text-2xl md:text-3xl xl:text-4xl tracking-tight">
+					<h1 className="font-bold text-xl md:text-2xl xl:text-3xl tracking-tight">
 						Fund Your Account
 					</h1>
 
-					<p className="mx-auto mt-2 max-w-xl text-muted-foreground text-sm md:text-base xl:text-lg leading-relaxed">
+					<p className="mx-auto mt-2 max-w-xl text-[11px] text-muted-foreground md:text-xs xl:text-sm leading-relaxed">
 						Deposit funds securely and begin managing your Trade portfolio
 						instantly.
 					</p>

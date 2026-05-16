@@ -1,18 +1,21 @@
 import { Coin1, Danger, TickCircle, WalletMinus } from "iconsax-reactjs";
 import { useState } from "react";
 import { toast } from "react-fox-toast";
+import { useNewTx } from "#/services/mutations.service";
+import { useBalanceStore } from "#/stores/dashboard.store";
 import { useSettingsStore } from "#/stores/settings.store";
 import { formatCurrency } from "#/utils/format";
 
 const Form = ({ close }: { close: () => void }) => {
 	const { settings } = useSettingsStore();
+	const { stats } = useBalanceStore();
 	if (!settings) {
 		toast.error("Something went wrong, kindly restart the process");
 		close();
 	}
 
-	const [form, setForm] = useState({ coin: "", address: "", amount: "" });
-	const [loading, setLoading] = useState<boolean>(false);
+	const newTx = useNewTx();
+	const [form, setForm] = useState({ coin: "", address: "", amount: "10" });
 	const coins = settings?.withdrawalCoins || [];
 
 	// Functions
@@ -21,10 +24,32 @@ const Form = ({ close }: { close: () => void }) => {
 	};
 
 	const handleSubmit = () => {
-		setLoading(true);
-		setTimeout(() => {
-			setLoading(false);
-		}, 1000);
+		if (!form.address.trim() || !form.coin.trim() || !form.amount.trim())
+			return toast.error("Kindly fill all necessary field before proceeding");
+		if ((stats?.availableBalance ?? 0) < parseInt(form.amount, 10))
+			return toast.error(
+				"The entered amount is greater than your available balance",
+			);
+		const payload = {
+			type: "WITHDRAWAL",
+			cryptoSymbol: form.coin,
+			walletAddress: form.address,
+			amount: parseInt(form.amount, 10),
+		};
+
+		newTx.mutate(payload, {
+			onSuccess: () => {
+				toast.success("Your Withdrawal is processing and currently pending");
+				close();
+			},
+			// biome-ignore lint/suspicious/noExplicitAny: false positive
+			onError: (error: any) => {
+				const message =
+					error?.response?.data?.message ||
+					"Failed to Process Withdrawal, Please Try Again.";
+				toast.error(message);
+			},
+		});
 	};
 
 	return (
@@ -161,9 +186,18 @@ const Form = ({ close }: { close: () => void }) => {
 							</span>
 						)}
 					</div>
-					<p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm montserrat">
-						Minimum Withdrawal ${settings?.minWithdrawal}
-					</p>
+					{form.amount.trim() ? (
+						<p
+							className={`${(stats?.availableBalance ?? 0) < parseInt(form.amount, 10) ? "text-destructive" : "text-muted-foreground"} text-[11px]  md:text-xs xl:text-sm montserrat`}
+						>
+							Your Available Balance{" "}
+							{formatCurrency(stats?.availableBalance || 0)}
+						</p>
+					) : (
+						<p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm montserrat">
+							Minimum Withdrawal {formatCurrency(settings?.minWithdrawal || 0)}
+						</p>
+					)}
 				</div>
 
 				{/* Summary */}
@@ -205,15 +239,17 @@ const Form = ({ close }: { close: () => void }) => {
 				<button
 					type="button"
 					onClick={handleSubmit}
-					disabled={loading || !form.coin || !form.address || !form.amount}
+					disabled={
+						newTx.isPending || !form.coin || !form.address || !form.amount
+					}
 					className="flex justify-center items-center gap-2 bg-primary hover:opacity-90 disabled:opacity-50 shadow shadow-primary/20 py-3 rounded-xl w-full font-bold text-primary-foreground active:scale-[0.99] transition-all cursor-pointer disabled:cursor-not-allowed"
 				>
-					{loading ? (
+					{newTx.isPending ? (
 						<span className="border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full size-4 animate-spin" />
 					) : (
 						<WalletMinus className="size-4" />
 					)}
-					{loading ? "Processing..." : "Submit Withdrawal"}
+					{newTx.isPending ? "Processing..." : "Submit Withdrawal"}
 				</button>
 			</section>
 		</main>
