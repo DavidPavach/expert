@@ -61,6 +61,7 @@ declare type NewAdminPayload = {
 
 // Settings
 declare interface DepositCoin {
+	_id: string;
 	coinName: string;
 	symbol: string;
 	qrCode: string;
@@ -68,6 +69,7 @@ declare interface DepositCoin {
 }
 
 declare interface WithdrawalCoin {
+	_id: string;
 	coinName: string;
 	symbol: string;
 }
@@ -120,4 +122,29 @@ declare type DashboardStats = {
 	totalWithdrawals: number;
 	approvedPenalties: number;
 	availableBalance: number;
+};
+
+// Settings
+declare type SettingsPayload = {
+	threshold?: number;
+	whatsAppNumber?: string;
+	address?: string;
+	thresholdText?: string;
+	depositCoins?: [
+		{
+			coinName: string;
+			symbol: string;
+			qrCode: string;
+			walletAddress: string;
+		},
+	];
+	withdrawalCoins?: [
+		{
+			coinName: string;
+			symbol: string;
+		},
+	];
+	minDeposit?: number;
+	minWithdrawal?: number;
+	noWithdrawal?: boolean;
 };

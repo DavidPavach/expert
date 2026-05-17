@@ -39,3 +39,18 @@ export const formatCurrency = (value: number, max = 2) => {
 		maximumFractionDigits: max,
 	}).format(value);
 };
+
+// Check for value
+export const checkValue = (
+	obj: Record<string, string | number | boolean>,
+): boolean => {
+	return (
+		Object.keys(obj ?? {}).length > 0 &&
+		Object.values(obj ?? {}).some(
+			(v) =>
+				v !== undefined &&
+				v !== null &&
+				!(typeof v === "string" && v.trim() === ""),
+		)
+	);
+};

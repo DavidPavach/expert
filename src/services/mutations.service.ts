@@ -8,9 +8,12 @@ import {
 	authAdmin,
 	authUser,
 	createUser,
+	deleteDepositCoin,
+	deleteWithdrawalCoin,
 	newAdmin,
 	newTransaction,
 	updateProfile,
+	updateSettings,
 } from "./api.service";
 
 // Create User
@@ -39,35 +42,6 @@ export function useAuth() {
 			queryClient.invalidateQueries();
 			useMeStore.getState().ensureUser(queryClient);
 			useSettingsStore.getState().ensureSettings(queryClient);
-		},
-	});
-}
-
-// Auth Admin
-export function useAuthAdmin() {
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: (data: AuthPayload) => authAdmin(data),
-		onError: (error) => {
-			console.error("Admin Authentication failed:", error);
-		},
-		onSuccess: async () => {
-			queryClient.invalidateQueries();
-		},
-	});
-}
-
-// New Admin
-export function useNewAdmin() {
-	const queryClient = useQueryClient();
-
-	return useMutation({
-		mutationFn: (data: NewAdminPayload) => newAdmin(data),
-		onError: (error) => {
-			console.error("Admin Creation failed:", error);
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["admins"] });
 		},
 	});
 }
@@ -101,6 +75,82 @@ export function useNewTx() {
 			queryClient.invalidateQueries({ queryKey: ["myTransactions"] });
 			queryClient.invalidateQueries({ queryKey: ["dashboard"] });
 			useBalanceStore.getState().ensureStats(queryClient, true);
+		},
+	});
+}
+
+// Admin
+
+// Auth Admin
+export function useAuthAdmin() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: (data: AuthPayload) => authAdmin(data),
+		onError: (error) => {
+			console.error("Admin Authentication failed:", error);
+		},
+		onSuccess: async () => {
+			queryClient.invalidateQueries();
+		},
+	});
+}
+
+// New Admin
+export function useNewAdmin() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (data: NewAdminPayload) => newAdmin(data),
+		onError: (error) => {
+			console.error("Admin Creation failed:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["admins"] });
+		},
+	});
+}
+
+// Settings
+export function useAdminSettings() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (data: SettingsPayload) => updateSettings(data),
+		onError: (error) => {
+			console.error("Settings update failed:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["settings"] });
+		},
+	});
+}
+
+// Delete Deposit Coin
+export function useAdminDeleteDepositCoin() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (id: string) => deleteDepositCoin(id),
+		onError: (error) => {
+			console.error("Failed to delete Deposit coin:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["settings"] });
+		},
+	});
+}
+
+// Delete Withdrawal Coin
+export function useAdminDeleteWithdrawalCoin() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (id: string) => deleteWithdrawalCoin(id),
+		onError: (error) => {
+			console.error("Failed to delete Withdrawal coin:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["settings"] });
 		},
 	});
 }

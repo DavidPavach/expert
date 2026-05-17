@@ -143,7 +143,8 @@ export default function Form() {
 										value={method.coinName}
 										className="bg-background text-foreground capitalize"
 									>
-										{method.coinName} {method.symbol}
+										{method.coinName}{" "}
+										<span className="uppercase">{method.symbol}</span>
 									</option>
 								))}
 							</select>
@@ -263,8 +264,9 @@ export default function Form() {
 										</div>
 
 										<div>
-											<p className="font-medium">
-												{method.coinName} {method.symbol}
+											<p className="font-medium capitalize">
+												{method.coinName}{" "}
+												<span className="uppercase">{method.symbol}</span>
 											</p>
 											<p className="mt-1 text-[11px] text-muted-foreground md:text-xs xl:text-sm">
 												Crypto Wallet

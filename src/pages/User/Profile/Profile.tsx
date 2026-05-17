@@ -19,6 +19,7 @@ import { toast } from "react-fox-toast";
 import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "#/enum";
 import { useUpdateProfile } from "#/services/mutations.service";
 import { useMeStore } from "#/stores/me.store";
+import { checkValue } from "#/utils/format";
 import { useS3Upload } from "@/hooks/useS3Upload";
 
 export default function ProfilePage() {
@@ -44,6 +45,11 @@ export default function ProfilePage() {
 	// Functions
 	const onChange = (name: string, value: string) => {
 		setProfileData((prev) => ({ ...prev, [name]: value }));
+	};
+
+	const reset = () => {
+		setProfileData({});
+		setPasswords({ currentPassword: "", newPassword: "", confirmPassword: "" });
 	};
 
 	const passwordStrength = useMemo(() => {
@@ -120,6 +126,13 @@ export default function ProfilePage() {
 	// Handle Submit
 	const updateProfile = useUpdateProfile();
 	const handleSubmit = () => {
+		const hasValue = checkValue({ ...profileData, ...passwords });
+
+		if (!hasValue)
+			return toast.error(
+				"No change was detected. Please update a value to continue",
+			);
+
 		if (passwords.newPassword?.trim()) {
 			if (!passwords.currentPassword?.trim()) {
 				return toast.error("Please enter your current password.");
@@ -144,6 +157,7 @@ export default function ProfilePage() {
 		updateProfile.mutate(payload, {
 			onSuccess: () => {
 				toast.success("Profile Updated !!!");
+				reset();
 			},
 			// biome-ignore lint/suspicious/noExplicitAny: false positive
 			onError: (error: any) => {

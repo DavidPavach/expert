@@ -6,6 +6,7 @@ import {
 	dashboardStats,
 	fetchPrices,
 	fetchSettings,
+	fetchTxs,
 } from "./api.service";
 
 // Stores
@@ -39,5 +40,13 @@ export function useDashboard() {
 	return useQuery({
 		queryKey: ["dashboard"],
 		queryFn: () => dashboardStats(),
+	});
+}
+
+// Admin
+export function useAdminTypeTxs(page: number, limit: number, type: string) {
+	return useQuery({
+		queryKey: ["dashboard", page, limit, type],
+		queryFn: () => fetchTxs(page, limit, type),
 	});
 }

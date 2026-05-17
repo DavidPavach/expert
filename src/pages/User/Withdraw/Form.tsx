@@ -112,7 +112,7 @@ const Form = ({ close }: { close: () => void }) => {
 										<p className="font-semibold text-[11px] md:text-xs xl:text-sm truncate capitalize">
 											{coin.coinName}
 										</p>
-										<p className="text-[10px] text-muted-foreground md:text-[11px] md:text-xs">
+										<p className="text-[10px] text-muted-foreground md:text-[11px] md:text-xs uppercase">
 											{coin.symbol}
 										</p>
 									</div>

@@ -10,11 +10,13 @@ import {
 	NotificationBing,
 	Personalcard,
 	Profile2User,
+	SecurityUser,
 	Setting2,
 	TagUser,
 	Trade,
 	TrendUp,
 	UserSearch,
+	UserTag,
 } from "iconsax-reactjs";
 
 import { useState } from "react";
@@ -56,6 +58,15 @@ const NAV_SECTIONS: NavSection[] = [
 			{ href: "/users", icon: UserSearch, label: "Users" },
 			{ href: "/user-kyc", icon: Personalcard, label: "User Kyc" },
 			{ href: "/user-referrals", icon: Profile2User, label: "Referrals" },
+		],
+	},
+	{
+		id: "staff",
+		title: "Staff",
+		icon: UserTag,
+		links: [
+			{ href: "/me", icon: TagUser, label: "Me" },
+			{ href: "/staff", icon: SecurityUser, label: "Staff" },
 		],
 	},
 	{

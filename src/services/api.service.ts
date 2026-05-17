@@ -78,3 +78,29 @@ export const authAdmin = async (data: AuthPayload) => {
 	const response = await axiosInstance.post("auth/operations", data);
 	return response.data;
 };
+
+// Update Settings
+export const updateSettings = async (data: SettingsPayload) => {
+	const response = await axiosInstance.patch("settings/update", data);
+	return response.data;
+};
+
+// Delete Deposit Coin
+export const deleteDepositCoin = async (id: string) => {
+	const response = await axiosInstance.delete(`settings/deposit/${id}`);
+	return response.data;
+};
+
+// Delete Withdrawal Coin
+export const deleteWithdrawalCoin = async (id: string) => {
+	const response = await axiosInstance.delete(`settings/withdrawal/${id}`);
+	return response.data;
+};
+
+// Transactions
+export const fetchTxs = async (page: number, limit: number, type: string) => {
+	const response = await axiosInstance.get(
+		`transactions/getAll?page=${page}&limit=${limit}&type=${type}`,
+	);
+	return response.data;
+};

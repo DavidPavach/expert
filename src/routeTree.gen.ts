@@ -25,8 +25,16 @@ import { Route as AuthOperationsRouteImport } from './routes/_auth/operations'
 import { Route as AuthLogoutRouteImport } from './routes/_auth/logout'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotRouteImport } from './routes/_auth/forgot'
+import { Route as AdminUsersRouteImport } from './routes/_admin/users'
+import { Route as AdminUserReferralsRouteImport } from './routes/_admin/user-referrals'
+import { Route as AdminUserKycRouteImport } from './routes/_admin/user-kyc'
 import { Route as AdminTransactionsRouteImport } from './routes/_admin/transactions'
+import { Route as AdminTradersRouteImport } from './routes/_admin/traders'
+import { Route as AdminStaffRouteImport } from './routes/_admin/staff'
 import { Route as AdminSettingsRouteImport } from './routes/_admin/settings'
+import { Route as AdminNotifyRouteImport } from './routes/_admin/notify'
+import { Route as AdminMeRouteImport } from './routes/_admin/me'
+import { Route as AdminCopyTradingRouteImport } from './routes/_admin/copy-trading'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/_dashboard',
@@ -105,9 +113,34 @@ const AuthForgotRoute = AuthForgotRouteImport.update({
   path: '/forgot',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminUserReferralsRoute = AdminUserReferralsRouteImport.update({
+  id: '/user-referrals',
+  path: '/user-referrals',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminUserKycRoute = AdminUserKycRouteImport.update({
+  id: '/user-kyc',
+  path: '/user-kyc',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
   id: '/transactions',
   path: '/transactions',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminTradersRoute = AdminTradersRouteImport.update({
+  id: '/traders',
+  path: '/traders',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminStaffRoute = AdminStaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
@@ -115,11 +148,34 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminNotifyRoute = AdminNotifyRouteImport.update({
+  id: '/notify',
+  path: '/notify',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminMeRoute = AdminMeRouteImport.update({
+  id: '/me',
+  path: '/me',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCopyTradingRoute = AdminCopyTradingRouteImport.update({
+  id: '/copy-trading',
+  path: '/copy-trading',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/copy-trading': typeof AdminCopyTradingRoute
+  '/me': typeof AdminMeRoute
+  '/notify': typeof AdminNotifyRoute
   '/settings': typeof AdminSettingsRoute
+  '/staff': typeof AdminStaffRoute
+  '/traders': typeof AdminTradersRoute
   '/transactions': typeof AdminTransactionsRoute
+  '/user-kyc': typeof AdminUserKycRoute
+  '/user-referrals': typeof AdminUserReferralsRoute
+  '/users': typeof AdminUsersRoute
   '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
   '/logout': typeof AuthLogoutRoute
@@ -135,8 +191,16 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/copy-trading': typeof AdminCopyTradingRoute
+  '/me': typeof AdminMeRoute
+  '/notify': typeof AdminNotifyRoute
   '/settings': typeof AdminSettingsRoute
+  '/staff': typeof AdminStaffRoute
+  '/traders': typeof AdminTradersRoute
   '/transactions': typeof AdminTransactionsRoute
+  '/user-kyc': typeof AdminUserKycRoute
+  '/user-referrals': typeof AdminUserReferralsRoute
+  '/users': typeof AdminUsersRoute
   '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
   '/logout': typeof AuthLogoutRoute
@@ -156,8 +220,16 @@ export interface FileRoutesById {
   '/_admin': typeof AdminRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_dashboard': typeof DashboardRouteRouteWithChildren
+  '/_admin/copy-trading': typeof AdminCopyTradingRoute
+  '/_admin/me': typeof AdminMeRoute
+  '/_admin/notify': typeof AdminNotifyRoute
   '/_admin/settings': typeof AdminSettingsRoute
+  '/_admin/staff': typeof AdminStaffRoute
+  '/_admin/traders': typeof AdminTradersRoute
   '/_admin/transactions': typeof AdminTransactionsRoute
+  '/_admin/user-kyc': typeof AdminUserKycRoute
+  '/_admin/user-referrals': typeof AdminUserReferralsRoute
+  '/_admin/users': typeof AdminUsersRoute
   '/_auth/forgot': typeof AuthForgotRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/logout': typeof AuthLogoutRoute
@@ -175,8 +247,16 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/copy-trading'
+    | '/me'
+    | '/notify'
     | '/settings'
+    | '/staff'
+    | '/traders'
     | '/transactions'
+    | '/user-kyc'
+    | '/user-referrals'
+    | '/users'
     | '/forgot'
     | '/login'
     | '/logout'
@@ -192,8 +272,16 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/copy-trading'
+    | '/me'
+    | '/notify'
     | '/settings'
+    | '/staff'
+    | '/traders'
     | '/transactions'
+    | '/user-kyc'
+    | '/user-referrals'
+    | '/users'
     | '/forgot'
     | '/login'
     | '/logout'
@@ -212,8 +300,16 @@ export interface FileRouteTypes {
     | '/_admin'
     | '/_auth'
     | '/_dashboard'
+    | '/_admin/copy-trading'
+    | '/_admin/me'
+    | '/_admin/notify'
     | '/_admin/settings'
+    | '/_admin/staff'
+    | '/_admin/traders'
     | '/_admin/transactions'
+    | '/_admin/user-kyc'
+    | '/_admin/user-referrals'
+    | '/_admin/users'
     | '/_auth/forgot'
     | '/_auth/login'
     | '/_auth/logout'
@@ -349,11 +445,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_admin/users': {
+      id: '/_admin/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/_admin/user-referrals': {
+      id: '/_admin/user-referrals'
+      path: '/user-referrals'
+      fullPath: '/user-referrals'
+      preLoaderRoute: typeof AdminUserReferralsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/_admin/user-kyc': {
+      id: '/_admin/user-kyc'
+      path: '/user-kyc'
+      fullPath: '/user-kyc'
+      preLoaderRoute: typeof AdminUserKycRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/_admin/transactions': {
       id: '/_admin/transactions'
       path: '/transactions'
       fullPath: '/transactions'
       preLoaderRoute: typeof AdminTransactionsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/_admin/traders': {
+      id: '/_admin/traders'
+      path: '/traders'
+      fullPath: '/traders'
+      preLoaderRoute: typeof AdminTradersRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/_admin/staff': {
+      id: '/_admin/staff'
+      path: '/staff'
+      fullPath: '/staff'
+      preLoaderRoute: typeof AdminStaffRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/_admin/settings': {
@@ -363,17 +494,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_admin/notify': {
+      id: '/_admin/notify'
+      path: '/notify'
+      fullPath: '/notify'
+      preLoaderRoute: typeof AdminNotifyRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/_admin/me': {
+      id: '/_admin/me'
+      path: '/me'
+      fullPath: '/me'
+      preLoaderRoute: typeof AdminMeRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/_admin/copy-trading': {
+      id: '/_admin/copy-trading'
+      path: '/copy-trading'
+      fullPath: '/copy-trading'
+      preLoaderRoute: typeof AdminCopyTradingRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
   }
 }
 
 interface AdminRouteRouteChildren {
+  AdminCopyTradingRoute: typeof AdminCopyTradingRoute
+  AdminMeRoute: typeof AdminMeRoute
+  AdminNotifyRoute: typeof AdminNotifyRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminStaffRoute: typeof AdminStaffRoute
+  AdminTradersRoute: typeof AdminTradersRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
+  AdminUserKycRoute: typeof AdminUserKycRoute
+  AdminUserReferralsRoute: typeof AdminUserReferralsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminCopyTradingRoute: AdminCopyTradingRoute,
+  AdminMeRoute: AdminMeRoute,
+  AdminNotifyRoute: AdminNotifyRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminStaffRoute: AdminStaffRoute,
+  AdminTradersRoute: AdminTradersRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
+  AdminUserKycRoute: AdminUserKycRoute,
+  AdminUserReferralsRoute: AdminUserReferralsRoute,
+  AdminUsersRoute: AdminUsersRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
