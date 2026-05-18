@@ -113,6 +113,7 @@ declare type NewTxPayload = {
 	amount: number;
 	hash?: string;
 	walletAddress?: string;
+	status?: string;
 };
 
 // Dashboard
@@ -147,4 +148,39 @@ declare type SettingsPayload = {
 	minDeposit?: number;
 	minWithdrawal?: number;
 	noWithdrawal?: boolean;
+};
+
+// Transactions
+declare type Transaction = {
+	amount: number;
+	createdAt: string;
+	cryptoSymbol: string;
+	hash?: string;
+	type: "DEPOSIT" | "WITHDRAWAL" | "BONUS" | "PENALTY";
+	status: "PENDING" | "APPROVED" | "REJECTED";
+	updatedAt: string;
+	walletAddress?: string;
+	user: string;
+};
+
+declare type AdminTx = {
+	amount: number;
+	createdAt: string;
+	cryptoSymbol: string;
+	hash?: string;
+	type: "DEPOSIT" | "WITHDRAWAL" | "BONUS" | "PENALTY";
+	status: "PENDING" | "APPROVED" | "REJECTED";
+	updatedAt: string;
+	walletAddress?: string;
+	user: Me;
+	_id: string;
+};
+
+declare type EditTxPayload = {
+	type?: string;
+	status?: string;
+	cryptoSymbol?: string;
+	amount?: number;
+	hash?: string;
+	walletAddress?: string;
 };

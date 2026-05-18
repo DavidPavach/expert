@@ -5,11 +5,14 @@ import { useMeStore } from "#/stores/me.store";
 import { useSettingsStore } from "#/stores/settings.store";
 // APIs
 import {
+	adminNewTx,
 	authAdmin,
 	authUser,
 	createUser,
 	deleteDepositCoin,
+	deleteTx,
 	deleteWithdrawalCoin,
+	editTx,
 	newAdmin,
 	newTransaction,
 	updateProfile,
@@ -151,6 +154,64 @@ export function useAdminDeleteWithdrawalCoin() {
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["settings"] });
+		},
+	});
+}
+
+// New Transaction
+type NewTxVariables = { id: string; data: NewTxPayload };
+
+export function useAdminNewTx() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (vars: NewTxVariables) => {
+			return adminNewTx(vars.id, vars.data);
+		},
+		onError: (error) => {
+			console.error("Failed to create transaction:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["transactions"],
+			});
+		},
+	});
+}
+
+// Edit Transaction
+type EditTxVariables = { id: string; data: EditTxPayload };
+
+export function useAdminEditTx() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (vars: EditTxVariables) => {
+			return editTx(vars.id, vars.data);
+		},
+		onError: (error) => {
+			console.error("Failed to edit transaction:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["transactions"],
+			});
+		},
+	});
+}
+
+// Delete Transactions
+export function useAdminDeleteTx() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (id: string) => {
+			return deleteTx(id);
+		},
+		onError: (error) => {
+			console.error("Failed to delete transaction:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["transactions"],
+			});
 		},
 	});
 }

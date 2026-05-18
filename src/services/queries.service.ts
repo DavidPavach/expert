@@ -7,6 +7,7 @@ import {
 	fetchPrices,
 	fetchSettings,
 	fetchTxs,
+	fetchUser,
 } from "./api.service";
 
 // Stores
@@ -44,9 +45,20 @@ export function useDashboard() {
 }
 
 // Admin
+
+// Fetch Admin Transactions
 export function useAdminTypeTxs(page: number, limit: number, type: string) {
 	return useQuery({
-		queryKey: ["dashboard", page, limit, type],
+		queryKey: ["transactions", page, limit, type],
 		queryFn: () => fetchTxs(page, limit, type),
+	});
+}
+
+// Fetch a User
+export function useAdminUser(identifier: string) {
+	return useQuery({
+		queryKey: ["identifier", identifier],
+		queryFn: () => fetchUser(identifier),
+		enabled: identifier.length > 3,
 	});
 }

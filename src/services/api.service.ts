@@ -98,9 +98,35 @@ export const deleteWithdrawalCoin = async (id: string) => {
 };
 
 // Transactions
+
+// Create New Transactions
+export const adminNewTx = async (id: string, data: NewTxPayload) => {
+	const response = await axiosInstance.post(`transactions/newTx/${id}`, data);
+	return response.data;
+};
+
+// Fetch Transactions
 export const fetchTxs = async (page: number, limit: number, type: string) => {
 	const response = await axiosInstance.get(
 		`transactions/getAll?page=${page}&limit=${limit}&type=${type}`,
 	);
+	return response.data;
+};
+
+// Delete Transaction
+export const deleteTx = async (id: string) => {
+	const response = await axiosInstance.delete(`transactions/delete/${id}`);
+	return response.data;
+};
+
+// Edit Transaction
+export const editTx = async (id: string, data: EditTxPayload) => {
+	const response = await axiosInstance.patch(`transactions/update/${id}`, data);
+	return response.data;
+};
+
+// Fetch a User
+export const fetchUser = async (identifier: string) => {
+	const response = await axiosInstance.get(`users/fetch/user/${identifier}`);
 	return response.data;
 };

@@ -1,22 +1,70 @@
-import { useState } from "react";
+import { AddSquare } from "iconsax-reactjs";
+import { useEffect, useState } from "react";
+
 import AdminError from "#/components/AdminError";
 import AdminLoader from "#/components/AdminLoader";
-import { useAdminTypeTxs } from "#/services/queries.service";
+import { Overlay } from "#/components/Overlay";
+import Pagination from "#/components/Pagination";
+import { Button } from "#/components/ui/button";
 
-const tabs = [
-	{ id: "deposit", label: "Deposit Txs" },
-	{ id: "withdrawal", label: "Withdrawal Txs" },
-	{ id: "bonus", label: "Bonus Txs" },
-	{ id: "penalty", label: "Penalty Txs" },
+import { useAdminTypeTxs } from "#/services/queries.service";
+import NewForm from "./NewForm";
+import Table from "./Table";
+
+type TransactionTab = "deposit" | "withdrawal" | "bonus" | "penalty";
+
+const TABS: {
+	id: TransactionTab;
+	label: string;
+}[] = [
+	{
+		id: "deposit",
+		label: "Deposit Txs",
+	},
+	{
+		id: "withdrawal",
+		label: "Withdrawal Txs",
+	},
+	{
+		id: "bonus",
+		label: "Bonus Txs",
+	},
+	{
+		id: "penalty",
+		label: "Penalty Txs",
+	},
 ];
-const index = () => {
-	const [activeTab, setActiveTab] = useState("deposit");
-	const [page, setPage] = useState<number>(1);
+
+const PAGE_LIMIT = 50;
+
+const TransactionsPage = () => {
+	const [newTx, setNewTx] = useState(false);
+	const [activeTab, setActiveTab] = useState<TransactionTab>("deposit");
+	const [page, setPage] = useState(1);
+
 	const { data, isLoading, isError, refetch } = useAdminTypeTxs(
 		page,
-		50,
+		PAGE_LIMIT,
 		activeTab.toUpperCase(),
 	);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: false positives
+	useEffect(() => {
+		setPage(1);
+	}, [activeTab]);
+
+	const toggleNew = () => {
+		setNewTx((prev) => !prev);
+	};
+
+	const txs = data?.data?.data ?? [];
+
+	const pagination = data?.data?.pagination ?? {
+		total: 0,
+		page: 1,
+		limit: PAGE_LIMIT,
+		totalPages: 1,
+	};
 
 	if (isLoading) {
 		return <AdminLoader />;
@@ -26,20 +74,26 @@ const index = () => {
 		return <AdminError onRetry={refetch} />;
 	}
 
-	console.log("The data", data);
-
 	return (
 		<main>
-			<header>
-				<h1 className="font-bold text-xl md:text-2xl xl:text-3xl">
-					User Transactions
-				</h1>
-				<p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm">
-					Expertmirrorcon — Admin Control Panel
-				</p>
+			<header className="flex justify-between items-center">
+				<div>
+					<h1 className="font-bold text-xl md:text-2xl xl:text-3xl">
+						User Transactions
+					</h1>
+					<p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm">
+						Expertmirrorcon — Admin Control Panel
+					</p>
+				</div>
+
+				<Button onClick={toggleNew}>
+					New{" "}
+					<AddSquare className="size-4 md:size-4.5 xl:size-5" variant="Bold" />
+				</Button>
 			</header>
+
 			<section className="flex gap-1 bg-card/60 backdrop-blur-sm my-6 p-1 border border-border rounded-xl overflow-x-auto">
-				{tabs.map((tab) => (
+				{TABS.map((tab) => (
 					<button
 						type="button"
 						key={tab.id}
@@ -54,9 +108,23 @@ const index = () => {
 					</button>
 				))}
 			</section>
-			<section></section>
+
+			<Table data={txs} />
+
+			{pagination.totalPages > 1 && (
+				<Pagination
+					pageSize={pagination.totalPages}
+					defaultPage={page}
+					page={page}
+					onPageChange={setPage}
+				/>
+			)}
+
+			<Overlay open={newTx} onClose={toggleNew} variant="bottom">
+				<NewForm />
+			</Overlay>
 		</main>
 	);
 };
 
-export default index;
+export default TransactionsPage;
