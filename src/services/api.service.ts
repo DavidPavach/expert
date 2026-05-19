@@ -130,3 +130,29 @@ export const fetchUser = async (identifier: string) => {
 	const response = await axiosInstance.get(`users/fetch/user/${identifier}`);
 	return response.data;
 };
+
+// Fetch al Traders
+export const fetchTraders = async (page: number, limit: number) => {
+	const response = await axiosInstance.get(
+		`traders/all?page=${page}&limit=${limit}`,
+	);
+	return response.data;
+};
+
+// New Trader
+export const newTrader = async (data: NewTraderPayload) => {
+	const response = await axiosInstance.post("traders/new", data);
+	return response.data;
+};
+
+// Delete Trader
+export const deleteTrader = async (id: string) => {
+	const response = await axiosInstance.delete(`traders/delete/${id}`);
+	return response.data;
+};
+
+// Update Trader
+export const updateTrader = async (id: string, data: UpdateTraderPayload) => {
+	const response = await axiosInstance.patch(`traders/update/${id}`, data);
+	return response.data;
+};

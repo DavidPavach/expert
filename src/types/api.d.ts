@@ -184,3 +184,41 @@ declare type EditTxPayload = {
 	hash?: string;
 	walletAddress?: string;
 };
+
+// Traders
+declare type NewTraderPayload = {
+	name: string;
+	title: string;
+	bio: string;
+	profilePicture: string;
+	active: boolean;
+	ratings: number;
+	ratingsTotal: number;
+	winRate: number;
+	totalReturn: number;
+	equity: number;
+	totalTrades: number;
+	minInvestment: number;
+	totalFollowers: number;
+};
+
+declare type UpdateTraderPayload = Partial<NewTraderPayload>;
+
+declare type Trader = {
+	_id: string;
+	createdAt: string;
+	updatedAt: string;
+	name: string;
+	title: string;
+	bio: string;
+	profilePicture: string;
+	active: boolean;
+	ratings: number;
+	ratingsTotal: number;
+	winRate: number;
+	totalReturn: number;
+	equity: number;
+	totalTrades: number;
+	minInvestment: number;
+	totalFollowers: number;
+};

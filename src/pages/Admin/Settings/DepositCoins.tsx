@@ -264,7 +264,7 @@ const DepositCoins = ({ depositCoins }: { depositCoins: DepositCoin[] }) => {
 
 					<input
 						type="file"
-						accept="image/*"
+						accept=".jpg,.jpeg,.png,.gif,.webp,.svg"
 						onChange={handleFileChange}
 						className="hidden"
 						required

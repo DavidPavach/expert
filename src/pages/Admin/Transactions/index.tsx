@@ -6,7 +6,7 @@ import AdminLoader from "#/components/AdminLoader";
 import { Overlay } from "#/components/Overlay";
 import Pagination from "#/components/Pagination";
 import { Button } from "#/components/ui/button";
-
+import { PAGE_LIMIT } from "#/enum";
 import { useAdminTypeTxs } from "#/services/queries.service";
 import NewForm from "./NewForm";
 import Table from "./Table";
@@ -35,12 +35,10 @@ const TABS: {
 	},
 ];
 
-const PAGE_LIMIT = 50;
-
 const TransactionsPage = () => {
-	const [newTx, setNewTx] = useState(false);
+	const [newTx, setNewTx] = useState<boolean>(false);
 	const [activeTab, setActiveTab] = useState<TransactionTab>("deposit");
-	const [page, setPage] = useState(1);
+	const [page, setPage] = useState<number>(1);
 
 	const { data, isLoading, isError, refetch } = useAdminTypeTxs(
 		page,

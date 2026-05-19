@@ -10,13 +10,16 @@ import {
 	authUser,
 	createUser,
 	deleteDepositCoin,
+	deleteTrader,
 	deleteTx,
 	deleteWithdrawalCoin,
 	editTx,
 	newAdmin,
+	newTrader,
 	newTransaction,
 	updateProfile,
 	updateSettings,
+	updateTrader,
 } from "./api.service";
 
 // Create User
@@ -211,6 +214,62 @@ export function useAdminDeleteTx() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["transactions"],
+			});
+		},
+	});
+}
+
+// New Trader
+export function useAdminNewTrader() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (data: NewTraderPayload) => {
+			return newTrader(data);
+		},
+		onError: (error) => {
+			console.error("Failed to create trader:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["traders"],
+			});
+		},
+	});
+}
+
+// Delete Trader
+export function useAdminDeleteTrader() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (id: string) => {
+			return deleteTrader(id);
+		},
+		onError: (error) => {
+			console.error("Failed to delete trader:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["traders"],
+			});
+		},
+	});
+}
+
+// Update Trader
+type EditTraderVariables = { id: string; data: UpdateTraderPayload };
+
+export function useAdminUpdateTrader() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (vars: EditTraderVariables) => {
+			return updateTrader(vars.id, vars.data);
+		},
+		onError: (error) => {
+			console.error("Failed to edit trader:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["traders"],
 			});
 		},
 	});

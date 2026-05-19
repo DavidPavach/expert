@@ -34,6 +34,7 @@ const initialFormState: FormState = {
 	walletAddress: "",
 	status: "PENDING",
 };
+
 const NewForm = () => {
 	const [selectedUser, setSelectedUser] = useState<string>("");
 	const [formData, setFormData] = useState<FormState>(initialFormState);
@@ -173,6 +174,7 @@ const NewForm = () => {
 				<div className="space-y-2">
 					<Label htmlFor="coinName">Coin Name</Label>
 					<Input
+						placeholder="Bitcoin"
 						type="text"
 						id="coinName"
 						name="coinName"
@@ -183,6 +185,7 @@ const NewForm = () => {
 				<div className="space-y-2">
 					<Label htmlFor="coinSymbol">Coin Symbol</Label>
 					<Input
+						placeholder="BTC"
 						type="text"
 						id="coinSymbol"
 						name="coinSymbol"
@@ -193,6 +196,7 @@ const NewForm = () => {
 				<div className="space-y-2">
 					<Label htmlFor="amount">Amount</Label>
 					<Input
+						placeholder="5000"
 						type="number"
 						id="amount"
 						name="amount"
@@ -204,6 +208,7 @@ const NewForm = () => {
 					<div className="space-y-2">
 						<Label htmlFor="walletAddress">Wallet Address</Label>
 						<Input
+							placeholder="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
 							type="text"
 							id="walletAddress"
 							name="walletAddress"
@@ -214,8 +219,8 @@ const NewForm = () => {
 				)}
 				{formData.type === "DEPOSIT" && (
 					<>
-						<Label htmlFor="hash">Transaction Evidence</Label>
-						<div className="flex justify-center items-center gap-3 hover:bg-primary/20 px-4 py-6 border border-border border-dashed rounded-xl transition-colors cursor-pointer">
+						<span className="block mb-2">Transaction Evidence</span>
+						<label className="flex justify-center items-center gap-3 hover:bg-primary/20 px-4 py-6 border border-border border-dashed rounded-xl transition-colors cursor-pointer">
 							{selectedImage ? (
 								<>
 									<img
@@ -236,12 +241,12 @@ const NewForm = () => {
 
 							<input
 								type="file"
-								accept="image/*"
+								accept=".jpg,.jpeg,.png,.gif,.webp,.svg"
 								onChange={handleFileChange}
 								className="hidden"
 								required
 							/>
-						</div>
+						</label>
 					</>
 				)}
 				<div className="space-y-2">
@@ -268,7 +273,7 @@ const NewForm = () => {
 			<Button
 				onClick={handleSubmit}
 				disabled={newTx.isPending}
-				className="gap-2 mt-8 w-full h-12"
+				className="gap-2 mt-8 w-full h-10"
 			>
 				{newTx.isPending ? (
 					<>

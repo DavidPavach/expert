@@ -54,3 +54,35 @@ export const checkValue = (
 		)
 	);
 };
+
+// Check for Difference
+export function hasDiff(
+	a: Record<string, number | string | boolean | object>,
+	b: Record<string, number | string | boolean | object>,
+): boolean {
+	const keys = Array.from(new Set([...Object.keys(a), ...Object.keys(b)]));
+	for (const k of keys) {
+		const valA = a[k];
+		const valB = b[k];
+
+		const typeA = Array.isArray(valA) ? "array" : typeof valA;
+		const typeB = Array.isArray(valB) ? "array" : typeof valB;
+		if (typeA !== typeB) return true;
+
+		let strA: string;
+		let strB: string;
+		try {
+			strA = JSON.stringify(valA);
+		} catch {
+			strA = String(valA);
+		}
+		try {
+			strB = JSON.stringify(valB);
+		} catch {
+			strB = String(valB);
+		}
+
+		if (strA !== strB) return true;
+	}
+	return false;
+}

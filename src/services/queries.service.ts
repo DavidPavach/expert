@@ -6,6 +6,7 @@ import {
 	dashboardStats,
 	fetchPrices,
 	fetchSettings,
+	fetchTraders,
 	fetchTxs,
 	fetchUser,
 } from "./api.service";
@@ -60,5 +61,13 @@ export function useAdminUser(identifier: string) {
 		queryKey: ["identifier", identifier],
 		queryFn: () => fetchUser(identifier),
 		enabled: identifier.length > 3,
+	});
+}
+
+// Fetch all Traders
+export function useFetchTraders(page: number, limit: number) {
+	return useQuery({
+		queryKey: ["traders"],
+		queryFn: () => fetchTraders(page, limit),
 	});
 }

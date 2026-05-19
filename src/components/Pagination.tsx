@@ -52,7 +52,7 @@ export default function Pagination({
 			{pages.map((p) =>
 				p === "…" ? (
 					<span
-						key={`${p}_${new Date()}`}
+						key={`${p}_`}
 						className="px-2 text-muted-foreground select-none"
 					>
 						…
