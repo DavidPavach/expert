@@ -25,25 +25,37 @@ export const useBalanceStore = create<BalanceState>((set, get) => ({
 
 	setStats: (stats) => set({ stats }),
 
-	clearStats: () => set({ stats: null, error: null }),
+	clearStats: () =>
+		set({
+			stats: null,
+			error: null,
+			loading: false,
+		}),
+
 	ensureStats: async (queryClient, force = false) => {
 		const existing = get().stats;
 
+		// Return existing state if already available
 		if (existing && !force) {
 			return existing;
 		}
 
-		set({ loading: true, error: null });
+		set({
+			loading: true,
+			error: null,
+		});
 
 		try {
 			// React Query cache
 			if (queryClient && !force) {
-				const cached = queryClient.getQueryData<DashboardStats>([
-					"dashboard-stats",
-				]);
+				const cached = queryClient.getQueryData<DashboardStats>(["dashboard"]);
 
 				if (cached) {
-					set({ stats: cached, loading: false });
+					set({
+						stats: cached,
+						loading: false,
+					});
+
 					return cached;
 				}
 			}
@@ -55,9 +67,24 @@ export const useBalanceStore = create<BalanceState>((set, get) => ({
 				throw new Error("Failed to fetch dashboard stats");
 			}
 
-			const statsData: DashboardStats = res.data;
+			const statsData: DashboardStats = {
+				approvedBonuses: res.data.approvedBonuses ?? 0,
+				approvedDeposits: res.data.approvedDeposits ?? 0,
+				approvedPenalties: res.data.approvedPenalties ?? 0,
+				approvedProfits: res.data.approvedProfits ?? 0,
+				availableBalance: res.data.availableBalance ?? 0,
+				totalCopyProfit: res.data.totalCopyProfit ?? 0,
+				totalLockedFunds: res.data.totalLockedFunds ?? 0,
+				totalProfit: res.data.totalProfit ?? 0,
+				totalTradeProfit: res.data.totalTradeProfit ?? 0,
+				totalWithdrawals: res.data.totalWithdrawals ?? 0,
+			};
 
-			set({ stats: statsData, loading: false });
+			set({
+				stats: statsData,
+				loading: false,
+			});
+
 			queryClient?.setQueryData(["dashboard"], statsData);
 
 			return statsData;
@@ -65,7 +92,10 @@ export const useBalanceStore = create<BalanceState>((set, get) => ({
 			const message =
 				err instanceof Error ? err.message : "An unknown error occurred";
 
-			set({ error: message, loading: false });
+			set({
+				error: message,
+				loading: false,
+			});
 
 			return null;
 		}

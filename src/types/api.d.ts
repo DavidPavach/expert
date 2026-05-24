@@ -123,6 +123,11 @@ declare type DashboardStats = {
 	totalWithdrawals: number;
 	approvedPenalties: number;
 	availableBalance: number;
+	approvedProfits: number;
+	totalCopyProfit: number;
+	totalLockedFunds: number;
+	totalProfit: number;
+	totalTradeProfit: number;
 };
 
 // Settings

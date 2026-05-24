@@ -59,7 +59,7 @@ const SupportPage = () => {
 					<h1 className="font-bold text-xl md:text-2xl xl:text-3xl tracking-tight">
 						Support Center
 					</h1>
-					<p className="mx-auto mt-2 max-w-xl text-[11px] text-muted-foreground md:text-xs xl:text-sm leading-relaxed">
+					<p className="mx-auto mt-1 max-w-xl text-[11px] text-muted-foreground md:text-xs xl:text-sm leading-relaxed">
 						We're here to help you with any questions or concerns
 					</p>
 				</div>

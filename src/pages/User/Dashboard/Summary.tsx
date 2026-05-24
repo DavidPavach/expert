@@ -63,7 +63,7 @@ const StatCard = ({
 export default function Summary() {
 	const { data, isLoading, isError } = useDashboard();
 	const { stats } = useBalanceStore();
-	const userBalances: DashboardStats = data || {
+	const userBalances: DashboardStats = data?.data || {
 		approvedDeposits: stats?.approvedDeposits,
 		approvedBonuses: stats?.approvedBonuses,
 		totalWithdrawals: stats?.totalWithdrawals,
@@ -97,6 +97,12 @@ export default function Summary() {
 							? "—"
 							: formatCurrency(userBalances.availableBalance)}
 				</h1>
+				<p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm">
+					Total Locked Up Funds:{" "}
+					<span className="text-primary">
+						{formatCurrency(userBalances.totalLockedFunds)}
+					</span>
+				</p>
 
 				{/* Badge */}
 				<div className="inline-flex items-center gap-x-2 bg-primary/5 mt-5 px-4 py-2 rounded-full text-[11px] md:text-xs xl:text-sm">

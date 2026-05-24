@@ -14,6 +14,7 @@ import {
 	fetchUserCopyTrading,
 	fetchUsers,
 	getTrades,
+	userTransaction,
 } from "./api.service";
 
 // Get current user
@@ -77,6 +78,19 @@ export function useTrades(page: number, limit: number) {
 	return useQuery({
 		queryKey: ["trades"],
 		queryFn: () => getTrades(page, limit),
+	});
+}
+
+// Fetch User Transactions
+export function useTransactions(
+	page: number,
+	limit: number,
+	type?: string,
+	others?: boolean,
+) {
+	return useQuery({
+		queryKey: ["transactions", page, limit, type, others],
+		queryFn: () => userTransaction(page, limit, type, others),
 	});
 }
 

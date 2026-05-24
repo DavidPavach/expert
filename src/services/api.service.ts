@@ -65,6 +65,25 @@ export const newTransaction = async (data: NewTxPayload) => {
 	return response.data;
 };
 
+// Get User Transaction
+export const userTransaction = async (
+	page: number,
+	limit: number,
+	type?: string,
+	others?: boolean,
+) => {
+	const params = new URLSearchParams();
+	params.append("page", String(page));
+	params.append("limit", String(limit));
+	if (type) params.append("type", type);
+	if (others) params.append("others", others.toString());
+
+	const response = await axiosInstance.get(
+		`transactions/get?${params.toString()}`,
+	);
+	return response.data;
+};
+
 // New Copy Trading
 export const newCopyTrading = async (id: string) => {
 	const response = await axiosInstance.post(`copy/new`, {
