@@ -1,7 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Icon } from "iconsax-reactjs";
-// Icons
 import {
 	AddSquare,
 	Candle,

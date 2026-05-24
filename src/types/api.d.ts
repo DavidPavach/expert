@@ -168,7 +168,7 @@ declare type AdminTx = {
 	createdAt: string;
 	cryptoSymbol: string;
 	hash?: string;
-	type: "DEPOSIT" | "WITHDRAWAL" | "BONUS" | "PENALTY";
+	type: "DEPOSIT" | "WITHDRAWAL" | "BONUS" | "PENALTY" | "PROFIT";
 	status: "PENDING" | "APPROVED" | "REJECTED";
 	updatedAt: string;
 	walletAddress?: string;
@@ -221,4 +221,104 @@ declare type Trader = {
 	totalTrades: number;
 	minInvestment: number;
 	totalFollowers: number;
+};
+
+// Users
+declare type User = {
+	_id: string;
+	username: string;
+	fullName: string;
+	email: string;
+	phoneNumber?: string;
+	country: string;
+	profilePicture: string;
+	suspended: boolean;
+	suspendedDate?: string;
+	suspensionDuration?: number;
+	withdrawalKey: string;
+	createdAt: string;
+	updatedAt: string;
+	accountId?: string;
+	bare: string;
+	lastSession?: string;
+	kycStatus: "PENDING" | "APPROVED" | "REJECTED" | "NOT STARTED";
+};
+
+// Copy Trading
+type Entry = {
+	date: Date;
+	percentChange: number;
+	price: number;
+};
+
+declare type CopyTrading = {
+	_id: string;
+	user: string;
+	masterTraderId: Trader;
+	investment: number;
+	currentValue: number;
+	pnl: number;
+	roi: number;
+	numberOfTrades: number;
+	winRate: number;
+	entries: Entry[];
+	status: "ACTIVE" | "PAUSED" | "CLOSED";
+	createdAt: string;
+	updatedAt: string;
+};
+
+declare type EditCopyPayload = {
+	currentValue: number;
+	pnl: number;
+	roi: number;
+	numberOfTrades: number;
+	winRate: number;
+	entries: [
+		{
+			date: string;
+			percentChange: number;
+			price: number;
+		},
+	];
+};
+
+// KYC
+declare type NewKycPayload = {
+	firstName: string;
+	lastName: string;
+	email: string;
+	phoneNumber: string;
+	dateOfBirth: string;
+	socialMediaUsername: string;
+	streetAddress: string;
+	city: string;
+	stateProvince: string;
+	countryNationality: string;
+	documentType: string;
+	frontSide: string;
+	backSide: string;
+};
+
+// Referral
+declare type Referral = {
+	_id: string;
+	rewardAmount: number;
+	createdAt: string;
+	referredUserId: {
+		_id: string;
+		username: string;
+		fullName: string;
+		profilePicture?: string;
+		createdAt: string;
+	};
+};
+
+// New Trade Payload
+declare type NewTradePayload = {
+	asset: string;
+	tradeType: string;
+	amount: number;
+	leverage: string;
+	entryPrice: number;
+	expiration: Date;
 };

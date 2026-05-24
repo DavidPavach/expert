@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Kyc from "@/pages/User/Kyc";
+import Support from "@/pages/User/Support";
 import { APP_NAME } from "../__root";
 
-export const Route = createFileRoute("/_dashboard/kyc")({
+export const Route = createFileRoute("/_dashboard/support")({
 	head: () => ({
 		meta: [
 			{
-				title: `KYC | ${APP_NAME}`,
+				title: `Support | ${APP_NAME}`,
 			},
 		],
 	}),
@@ -14,5 +14,5 @@ export const Route = createFileRoute("/_dashboard/kyc")({
 });
 
 function RouteComponent() {
-	return <Kyc />;
+	return <Support />;
 }

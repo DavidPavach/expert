@@ -1,17 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 
-// API endpoints
 import {
 	currentUser,
 	dashboardStats,
+	fetchKyc,
+	fetchKycs,
 	fetchPrices,
+	fetchReferrals,
 	fetchSettings,
 	fetchTraders,
 	fetchTxs,
 	fetchUser,
+	fetchUserCopyTrading,
+	fetchUsers,
+	getTrades,
 } from "./api.service";
-
-// Stores
 
 // Get current user
 export function useCurrentUser() {
@@ -45,6 +48,38 @@ export function useDashboard() {
 	});
 }
 
+// Fetch User Copy Trading
+export function useUserCopyTrading() {
+	return useQuery({
+		queryKey: ["copyTrading"],
+		queryFn: () => fetchUserCopyTrading(),
+	});
+}
+
+// Fetch User Referrals
+export function useReferrals(page: number, limit: number) {
+	return useQuery({
+		queryKey: ["referrals"],
+		queryFn: () => fetchReferrals(page, limit),
+	});
+}
+
+// Fetch User Kyc
+export function useKyc() {
+	return useQuery({
+		queryKey: ["kyc"],
+		queryFn: () => fetchKyc(),
+	});
+}
+
+// Fetch User Trades
+export function useTrades(page: number, limit: number) {
+	return useQuery({
+		queryKey: ["trades"],
+		queryFn: () => getTrades(page, limit),
+	});
+}
+
 // Admin
 
 // Fetch Admin Transactions
@@ -69,5 +104,21 @@ export function useFetchTraders(page: number, limit: number) {
 	return useQuery({
 		queryKey: ["traders"],
 		queryFn: () => fetchTraders(page, limit),
+	});
+}
+
+// Fetch all Users
+export function useFetchUsers(page: number, limit: number) {
+	return useQuery({
+		queryKey: ["users"],
+		queryFn: () => fetchUsers(page, limit),
+	});
+}
+
+// Fetch all Kycs
+export function useAllKycs(page: number, limit: number) {
+	return useQuery({
+		queryKey: ["kycs"],
+		queryFn: () => fetchKycs(page, limit),
 	});
 }

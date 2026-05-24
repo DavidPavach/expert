@@ -11,7 +11,7 @@ import { useAdminTypeTxs } from "#/services/queries.service";
 import NewForm from "./NewForm";
 import Table from "./Table";
 
-type TransactionTab = "deposit" | "withdrawal" | "bonus" | "penalty";
+type TransactionTab = "deposit" | "withdrawal" | "bonus" | "penalty" | "profit";
 
 const TABS: {
 	id: TransactionTab;
@@ -32,6 +32,10 @@ const TABS: {
 	{
 		id: "penalty",
 		label: "Penalty Txs",
+	},
+	{
+		id: "profit",
+		label: "Profit Txs",
 	},
 ];
 
@@ -90,7 +94,7 @@ const TransactionsPage = () => {
 				</Button>
 			</header>
 
-			<section className="flex gap-1 bg-card/60 backdrop-blur-sm my-6 p-1 border border-border rounded-xl overflow-x-auto">
+			<section className="flex gap-1 bg-card/60 backdrop-blur-sm my-6 p-1 border border-border rounded-xl overflow-x-auto hide-scrollbar">
 				{TABS.map((tab) => (
 					<button
 						type="button"

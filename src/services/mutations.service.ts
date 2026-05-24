@@ -10,13 +10,19 @@ import {
 	authUser,
 	createUser,
 	deleteDepositCoin,
+	deleteKyc,
 	deleteTrader,
 	deleteTx,
 	deleteWithdrawalCoin,
 	editTx,
 	newAdmin,
+	newCopyTrading,
+	newKyc,
+	newTrade,
 	newTrader,
 	newTransaction,
+	stopCopyTrading,
+	updateKyc,
 	updateProfile,
 	updateSettings,
 	updateTrader,
@@ -80,6 +86,72 @@ export function useNewTx() {
 		onSuccess: async () => {
 			queryClient.invalidateQueries({ queryKey: ["myTransactions"] });
 			queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+			useBalanceStore.getState().ensureStats(queryClient, true);
+		},
+	});
+}
+
+// New Copy Trading
+export function useNewCopyTrading() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (id: string) => newCopyTrading(id),
+		onError: (error) => {
+			console.error("New Copy Trading failed:", error);
+		},
+		onSuccess: async () => {
+			queryClient.invalidateQueries({ queryKey: ["copyTrading"] });
+			queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+			useBalanceStore.getState().ensureStats(queryClient, true);
+		},
+	});
+}
+
+// Stop Copy Trading
+export function useStopCopyTrading() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (id: string) => stopCopyTrading(id),
+		onError: (error) => {
+			console.error("Failed to stop copy trading:", error);
+		},
+		onSuccess: async () => {
+			queryClient.invalidateQueries({ queryKey: ["copyTrading"] });
+			queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+			useBalanceStore.getState().ensureStats(queryClient, true);
+		},
+	});
+}
+
+// New Kyc
+export function useNewKyc() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (data: NewKycPayload) => newKyc(data),
+		onError: (error) => {
+			console.error("Failed to create kyc data:", error);
+		},
+		onSuccess: async () => {
+			queryClient.invalidateQueries({ queryKey: ["kyc"] });
+			useMeStore.getState().ensureUser(queryClient, true);
+		},
+	});
+}
+
+// New Trades
+export function useNewTrade() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (data: NewTradePayload) => newTrade(data),
+		onError: (error) => {
+			console.error("Failed to create new trade data:", error);
+		},
+		onSuccess: async () => {
+			queryClient.invalidateQueries({ queryKey: ["trades"] });
 			useBalanceStore.getState().ensureStats(queryClient, true);
 		},
 	});
@@ -270,6 +342,44 @@ export function useAdminUpdateTrader() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["traders"],
+			});
+		},
+	});
+}
+
+// Update Kyc
+type UpdateUserKycVariables = { id: string; data: Partial<NewKycPayload> };
+
+export function useAdminUpdateKyc() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (vars: UpdateUserKycVariables) => {
+			return updateKyc(vars.id, vars.data);
+		},
+		onError: (error) => {
+			console.error("Failed to update user kyc:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["kycs"],
+			});
+		},
+	});
+}
+
+// Delete User Kyc
+export function useAdminDeleteKyc() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (id: string) => {
+			return deleteKyc(id);
+		},
+		onError: (error) => {
+			console.error("Failed to delete user kyc:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["kycs"],
 			});
 		},
 	});

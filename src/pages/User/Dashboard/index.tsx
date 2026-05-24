@@ -1,3 +1,4 @@
+import CreateTradeForm from "../Market/Form";
 import QuickTradeCard from "./Quick";
 import ReferralBox from "./Referral";
 import Summary from "./Summary";
@@ -13,8 +14,9 @@ const index = () => {
 				<div className="bg-card p-4 border border-card rounded-2xl w-full md:w-1/2 lg:w-[60%] h-fit min-h-100">
 					<Widget />
 				</div>
-				<div className="w-full md:w-1/2 lg:w-[40%]">
+				<div className="space-y-5 w-full md:w-1/2 lg:w-[40%]">
 					<QuickTradeCard />
+					<CreateTradeForm />
 				</div>
 			</section>
 			<ReferralBox />

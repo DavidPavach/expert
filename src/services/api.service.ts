@@ -65,6 +65,60 @@ export const newTransaction = async (data: NewTxPayload) => {
 	return response.data;
 };
 
+// New Copy Trading
+export const newCopyTrading = async (id: string) => {
+	const response = await axiosInstance.post(`copy/new`, {
+		masterTraderId: id,
+	});
+	return response.data;
+};
+
+// Fetch User Copy Tradings
+export const fetchUserCopyTrading = async () => {
+	const response = await axiosInstance.get(`copy/get`);
+	return response.data;
+};
+
+// Stop Copy Trading
+export const stopCopyTrading = async (id: string) => {
+	const response = await axiosInstance.patch(`copy/stop/${id}`);
+	return response.data;
+};
+
+// Fetch a Users Referrals
+export const fetchReferrals = async (page: number, limit: number) => {
+	const response = await axiosInstance.get(
+		`referral/fetch?page=${page}&limit=${limit}`,
+	);
+	return response.data;
+};
+
+// New Kyc
+export const newKyc = async (data: NewKycPayload) => {
+	const response = await axiosInstance.post(`kyc/create`, data);
+	return response.data;
+};
+
+// Fetch User Kyc
+export const fetchKyc = async () => {
+	const response = await axiosInstance.get(`kyc/fetch/user`);
+	return response.data;
+};
+
+// New Trade
+export const newTrade = async (data: NewTradePayload) => {
+	const response = await axiosInstance.post(`trades/new`, data);
+	return response.data;
+};
+
+// Fetch Trade History
+export const getTrades = async (page: number, limit: number) => {
+	const response = await axiosInstance.get(
+		`trades/get?page=${page}&limit=${limit}`,
+	);
+	return response.data;
+};
+
 // Admin APIs
 
 // Create New Admin
@@ -131,7 +185,7 @@ export const fetchUser = async (identifier: string) => {
 	return response.data;
 };
 
-// Fetch al Traders
+// Fetch all Traders
 export const fetchTraders = async (page: number, limit: number) => {
 	const response = await axiosInstance.get(
 		`traders/all?page=${page}&limit=${limit}`,
@@ -154,5 +208,39 @@ export const deleteTrader = async (id: string) => {
 // Update Trader
 export const updateTrader = async (id: string, data: UpdateTraderPayload) => {
 	const response = await axiosInstance.patch(`traders/update/${id}`, data);
+	return response.data;
+};
+
+// Users
+export const fetchUsers = async (page: number, limit: number) => {
+	const response = await axiosInstance.get(
+		`users/fetch/user/all?page=${page}&limit=${limit}`,
+	);
+	return response.data;
+};
+
+// Edit Copy Trading
+export const editCopy = async (id: string, data: EditCopyPayload) => {
+	const response = await axiosInstance.patch(`copy/update/${id}`, data);
+	return response.data;
+};
+
+// Fetch All Kycs
+export const fetchKycs = async (page: number, limit: number) => {
+	const response = await axiosInstance.get(
+		`kyc/fetch/user/all?page=${page}&limit=${limit}`,
+	);
+	return response.data;
+};
+
+// Update User Kyc
+export const updateKyc = async (id: string, data: Partial<NewKycPayload>) => {
+	const response = await axiosInstance.patch(`kyc/update/user/${id}`, data);
+	return response.data;
+};
+
+// Delete User Kyc
+export const deleteKyc = async (id: string) => {
+	const response = await axiosInstance.delete(`kyc/delete/user/${id}`);
 	return response.data;
 };

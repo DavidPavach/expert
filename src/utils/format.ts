@@ -86,3 +86,48 @@ export function hasDiff(
 	}
 	return false;
 }
+
+// Get Days Difference
+export function daysDifference(dateTimeStr: string): number {
+	const today = new Date();
+	const target = new Date(dateTimeStr);
+	if (Number.isNaN(target.getTime())) throw new Error("Invalid date string");
+
+	// Normalize both to local midnight to count full calendar days
+	const localMidnight = (d: Date) =>
+		new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+
+	const diffMs = localMidnight(today) - localMidnight(target);
+	const days = Math.round(diffMs / (1000 * 60 * 60 * 24));
+	return days;
+}
+
+export function dateFromInterval(interval: string): Date {
+	const now = new Date();
+	const msPer = {
+		minute: 60 * 1000,
+		hour: 60 * 60 * 1000,
+		day: 24 * 60 * 60 * 1000,
+	};
+
+	switch (interval) {
+		case "1 Minute":
+			return new Date(now.getTime() - 1 * msPer.minute);
+		case "5 Minutes":
+			return new Date(now.getTime() - 5 * msPer.minute);
+		case "15 Minutes":
+			return new Date(now.getTime() - 15 * msPer.minute);
+		case "30 Minutes":
+			return new Date(now.getTime() - 30 * msPer.minute);
+		case "1 Hour":
+			return new Date(now.getTime() - 1 * msPer.hour);
+		case "4 Hours":
+			return new Date(now.getTime() - 4 * msPer.hour);
+		case "1 Day":
+			return new Date(now.getTime() - 1 * msPer.day);
+		case "7 Days":
+			return new Date(now.getTime() - 7 * msPer.day);
+		default:
+			throw new Error(`Unsupported interval: ${interval}`);
+	}
+}

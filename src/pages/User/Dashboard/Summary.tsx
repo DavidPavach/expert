@@ -13,6 +13,7 @@ import {
 	TickCircle,
 } from "iconsax-reactjs";
 import { useDashboard } from "#/services/queries.service";
+import { useBalanceStore } from "#/stores/dashboard.store";
 import { useMeStore } from "#/stores/me.store";
 
 // Utils
@@ -61,12 +62,13 @@ const StatCard = ({
 
 export default function Summary() {
 	const { data, isLoading, isError } = useDashboard();
-	const userBalances: DashboardStats = data?.data || {
-		approvedDeposits: 0,
-		approvedBonuses: 0,
-		totalWithdrawals: 0,
-		approvedPenalties: 0,
-		availableBalance: 0,
+	const { stats } = useBalanceStore();
+	const userBalances: DashboardStats = data || {
+		approvedDeposits: stats?.approvedDeposits,
+		approvedBonuses: stats?.approvedBonuses,
+		totalWithdrawals: stats?.totalWithdrawals,
+		approvedPenalties: stats?.approvedPenalties,
+		availableBalance: stats?.availableBalance,
 	};
 	const { user } = useMeStore();
 

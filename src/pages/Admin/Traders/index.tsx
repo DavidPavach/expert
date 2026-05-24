@@ -58,8 +58,8 @@ const index = () => {
 				</Button>
 			</header>
 			{traders && traders.length === 0 ? (
-				<div className="flex justify-center items-center bg-card mx-auto py-20 rounded-xl">
-					<p className="text-destructive capitalize">No Transactions</p>
+				<div className="flex justify-center items-center bg-card mx-auto mt-10 py-20 rounded-xl">
+					<p className="text-destructive capitalize">No Traders Yet</p>
 				</div>
 			) : (
 				<div className="gap-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-10">
@@ -69,6 +69,7 @@ const index = () => {
 							expert={trader}
 							isCopying={false}
 							isAdmin={true}
+							isLoading={false}
 						/>
 					))}
 				</div>

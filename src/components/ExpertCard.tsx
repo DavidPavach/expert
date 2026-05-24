@@ -1,5 +1,5 @@
 import { DocumentCopy, Edit, Trash } from "iconsax-reactjs";
-import { CircleCheckBig } from "lucide-react";
+import { CircleCheckBig, Loader } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-fox-toast";
 import { Overlay } from "#/components/Overlay";
@@ -9,17 +9,20 @@ import { formatCurrency } from "#/utils/format";
 
 export default function ExpertCard({
 	expert,
-	isCopying,
 	isAdmin,
+	copy,
+	isCopying,
+	isLoading,
 }: {
 	expert: Trader;
-	isCopying: boolean;
 	isAdmin: boolean;
+	copy?: (amount: number, id: string, name: string) => void;
+	isLoading: boolean;
+	isCopying: boolean;
 }) {
 	const [openEdit, setOpenEdit] = useState(false);
 
 	// Functions
-
 	const toggleEdit = () => setOpenEdit((prev) => !prev);
 
 	const deleteTrader = useAdminDeleteTrader();
@@ -186,11 +189,25 @@ export default function ExpertCard({
 							</button>
 						) : (
 							<button
+								disabled={isCopying || isLoading}
+								onClick={() => {
+									if (!copy) return;
+									copy(expert.minInvestment, expert._id, expert.name);
+								}}
 								type="button"
 								className="flex justify-center items-center gap-2 bg-primary hover:opacity-90 shadow-lg shadow-primary/20 py-3 rounded-xl w-full font-bold text-primary-foreground transition-all cursor-pointer"
 							>
-								<DocumentCopy className="size-5 md:size-5.5 xl:size-6" />
-								Start Copying ({formatCurrency(expert.minInvestment)})
+								{isLoading ? (
+									<>
+										<Loader className="size-5 md:size-5.5 xl:size-6" />
+										Copy
+									</>
+								) : (
+									<>
+										<DocumentCopy className="size-5 md:size-5.5 xl:size-6" />
+										Start Copying ({formatCurrency(expert.minInvestment)})
+									</>
+								)}
 							</button>
 						))}
 				</div>

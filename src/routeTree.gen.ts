@@ -14,9 +14,13 @@ import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AdminRouteRouteImport } from './routes/_admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardWithdrawalRouteImport } from './routes/_dashboard/withdrawal'
+import { Route as DashboardSupportRouteImport } from './routes/_dashboard/support'
 import { Route as DashboardSectionRouteImport } from './routes/_dashboard/section'
+import { Route as DashboardReferralRouteImport } from './routes/_dashboard/referral'
 import { Route as DashboardProfileRouteImport } from './routes/_dashboard/profile'
+import { Route as DashboardMarketRouteImport } from './routes/_dashboard/market'
 import { Route as DashboardKycRouteImport } from './routes/_dashboard/kyc'
+import { Route as DashboardHistoryRouteImport } from './routes/_dashboard/history'
 import { Route as DashboardDepositRouteImport } from './routes/_dashboard/deposit'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard/dashboard'
 import { Route as DashboardCopyRouteImport } from './routes/_dashboard/copy'
@@ -58,9 +62,19 @@ const DashboardWithdrawalRoute = DashboardWithdrawalRouteImport.update({
   path: '/withdrawal',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardSupportRoute = DashboardSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardSectionRoute = DashboardSectionRouteImport.update({
   id: '/section',
   path: '/section',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardReferralRoute = DashboardReferralRouteImport.update({
+  id: '/referral',
+  path: '/referral',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
@@ -68,9 +82,19 @@ const DashboardProfileRoute = DashboardProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardMarketRoute = DashboardMarketRouteImport.update({
+  id: '/market',
+  path: '/market',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardKycRoute = DashboardKycRouteImport.update({
   id: '/kyc',
   path: '/kyc',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardHistoryRoute = DashboardHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardDepositRoute = DashboardDepositRouteImport.update({
@@ -184,9 +208,13 @@ export interface FileRoutesByFullPath {
   '/copy': typeof DashboardCopyRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/deposit': typeof DashboardDepositRoute
+  '/history': typeof DashboardHistoryRoute
   '/kyc': typeof DashboardKycRoute
+  '/market': typeof DashboardMarketRoute
   '/profile': typeof DashboardProfileRoute
+  '/referral': typeof DashboardReferralRoute
   '/section': typeof DashboardSectionRoute
+  '/support': typeof DashboardSupportRoute
   '/withdrawal': typeof DashboardWithdrawalRoute
 }
 export interface FileRoutesByTo {
@@ -209,9 +237,13 @@ export interface FileRoutesByTo {
   '/copy': typeof DashboardCopyRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/deposit': typeof DashboardDepositRoute
+  '/history': typeof DashboardHistoryRoute
   '/kyc': typeof DashboardKycRoute
+  '/market': typeof DashboardMarketRoute
   '/profile': typeof DashboardProfileRoute
+  '/referral': typeof DashboardReferralRoute
   '/section': typeof DashboardSectionRoute
+  '/support': typeof DashboardSupportRoute
   '/withdrawal': typeof DashboardWithdrawalRoute
 }
 export interface FileRoutesById {
@@ -238,9 +270,13 @@ export interface FileRoutesById {
   '/_dashboard/copy': typeof DashboardCopyRoute
   '/_dashboard/dashboard': typeof DashboardDashboardRoute
   '/_dashboard/deposit': typeof DashboardDepositRoute
+  '/_dashboard/history': typeof DashboardHistoryRoute
   '/_dashboard/kyc': typeof DashboardKycRoute
+  '/_dashboard/market': typeof DashboardMarketRoute
   '/_dashboard/profile': typeof DashboardProfileRoute
+  '/_dashboard/referral': typeof DashboardReferralRoute
   '/_dashboard/section': typeof DashboardSectionRoute
+  '/_dashboard/support': typeof DashboardSupportRoute
   '/_dashboard/withdrawal': typeof DashboardWithdrawalRoute
 }
 export interface FileRouteTypes {
@@ -265,9 +301,13 @@ export interface FileRouteTypes {
     | '/copy'
     | '/dashboard'
     | '/deposit'
+    | '/history'
     | '/kyc'
+    | '/market'
     | '/profile'
+    | '/referral'
     | '/section'
+    | '/support'
     | '/withdrawal'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -290,9 +330,13 @@ export interface FileRouteTypes {
     | '/copy'
     | '/dashboard'
     | '/deposit'
+    | '/history'
     | '/kyc'
+    | '/market'
     | '/profile'
+    | '/referral'
     | '/section'
+    | '/support'
     | '/withdrawal'
   id:
     | '__root__'
@@ -318,9 +362,13 @@ export interface FileRouteTypes {
     | '/_dashboard/copy'
     | '/_dashboard/dashboard'
     | '/_dashboard/deposit'
+    | '/_dashboard/history'
     | '/_dashboard/kyc'
+    | '/_dashboard/market'
     | '/_dashboard/profile'
+    | '/_dashboard/referral'
     | '/_dashboard/section'
+    | '/_dashboard/support'
     | '/_dashboard/withdrawal'
   fileRoutesById: FileRoutesById
 }
@@ -368,11 +416,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardWithdrawalRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/_dashboard/support': {
+      id: '/_dashboard/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof DashboardSupportRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/_dashboard/section': {
       id: '/_dashboard/section'
       path: '/section'
       fullPath: '/section'
       preLoaderRoute: typeof DashboardSectionRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/referral': {
+      id: '/_dashboard/referral'
+      path: '/referral'
+      fullPath: '/referral'
+      preLoaderRoute: typeof DashboardReferralRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/_dashboard/profile': {
@@ -382,11 +444,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardProfileRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/_dashboard/market': {
+      id: '/_dashboard/market'
+      path: '/market'
+      fullPath: '/market'
+      preLoaderRoute: typeof DashboardMarketRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/_dashboard/kyc': {
       id: '/_dashboard/kyc'
       path: '/kyc'
       fullPath: '/kyc'
       preLoaderRoute: typeof DashboardKycRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/history': {
+      id: '/_dashboard/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof DashboardHistoryRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/_dashboard/deposit': {
@@ -572,9 +648,13 @@ interface DashboardRouteRouteChildren {
   DashboardCopyRoute: typeof DashboardCopyRoute
   DashboardDashboardRoute: typeof DashboardDashboardRoute
   DashboardDepositRoute: typeof DashboardDepositRoute
+  DashboardHistoryRoute: typeof DashboardHistoryRoute
   DashboardKycRoute: typeof DashboardKycRoute
+  DashboardMarketRoute: typeof DashboardMarketRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
+  DashboardReferralRoute: typeof DashboardReferralRoute
   DashboardSectionRoute: typeof DashboardSectionRoute
+  DashboardSupportRoute: typeof DashboardSupportRoute
   DashboardWithdrawalRoute: typeof DashboardWithdrawalRoute
 }
 
@@ -582,9 +662,13 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardCopyRoute: DashboardCopyRoute,
   DashboardDashboardRoute: DashboardDashboardRoute,
   DashboardDepositRoute: DashboardDepositRoute,
+  DashboardHistoryRoute: DashboardHistoryRoute,
   DashboardKycRoute: DashboardKycRoute,
+  DashboardMarketRoute: DashboardMarketRoute,
   DashboardProfileRoute: DashboardProfileRoute,
+  DashboardReferralRoute: DashboardReferralRoute,
   DashboardSectionRoute: DashboardSectionRoute,
+  DashboardSupportRoute: DashboardSupportRoute,
   DashboardWithdrawalRoute: DashboardWithdrawalRoute,
 }
 

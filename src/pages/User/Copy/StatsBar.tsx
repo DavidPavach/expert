@@ -1,16 +1,23 @@
 import { DollarCircle, Graph, Profile2User, Wallet1 } from "iconsax-reactjs";
+import { formatCurrency } from "#/utils/format";
 
-export default function StatsBar() {
-	const activeCopies = 0;
-	const totalInvested = 0;
-	const currentValue = 0;
-	const totalPnl = 0;
-	const roi = 0;
+type StatsProps = {
+	active: number;
+	investment: number;
+	currentValue: number;
+	pnl: number;
+};
 
+export default function StatsBar({
+	active,
+	investment,
+	currentValue,
+	pnl,
+}: StatsProps) {
 	const stats = [
 		{
 			label: "Active Copies",
-			value: activeCopies,
+			value: active,
 			sub: "Experts being copied",
 			icon: (
 				<Profile2User className="size-4 md:size-4.5 xl:size-5 text-primary" />
@@ -19,7 +26,7 @@ export default function StatsBar() {
 		},
 		{
 			label: "Total Invested",
-			value: `$${Number(totalInvested).toFixed(2)}`,
+			value: `${formatCurrency(investment)}`,
 			sub: "Capital deployed",
 			icon: (
 				<DollarCircle className="size-4 md:size-4.5 xl:size-5 text-green-500" />
@@ -28,15 +35,15 @@ export default function StatsBar() {
 		},
 		{
 			label: "Current Value",
-			value: `$${Number(currentValue).toFixed(2)}`,
+			value: `${formatCurrency(currentValue)}`,
 			sub: "Portfolio value",
 			icon: <Wallet1 className="size-4 md:size-4.5 xl:size-5 text-secondary" />,
 			iconBg: "bg-secondary/15 border-secondary/20",
 		},
 		{
 			label: "Total P&L",
-			value: `+$${Number(totalPnl).toFixed(2)}`,
-			sub: `${Number(roi).toFixed(2)}% ROI`,
+			value: `+$${Number(pnl).toFixed(2)}`,
+			sub: `${Number(pnl).toFixed(2)}% P&L`,
 			valueClass: "text-green-400",
 			icon: <Graph className="size-4 md:size-4.5 xl:size-5 text-green-500" />,
 			iconBg: "bg-green-500/15 border-green-500/20",

@@ -54,7 +54,7 @@ export default function ReferralBox() {
 							Referral programme
 						</p>
 						<h3 className="mt-1 font-semibold text-foreground text-base md:text-lg xl:text-xl tracking-[-0.03em]">
-							Refer a user and get up to 10% referral bonus
+							Refer a friend and earn up to a 5% bonus on their first deposit.
 						</h3>
 						<p className="mt-1 text-[11px] text-muted-foreground md:text-xs xl:text-sm leading-5">
 							Invite friends to join Expertmirrorcon using your unique referral

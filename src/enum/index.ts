@@ -20,6 +20,7 @@ export const TRANSACTION_TYPES = [
 	"WITHDRAWAL",
 	"BONUS",
 	"PENALTY",
+	"PROFIT",
 ] as const;
 export const TRANSACTION_STATUS = ["PENDING", "APPROVED", "REJECTED"] as const;
 
@@ -36,7 +37,18 @@ export const TYPE_COLORS = {
 	WITHDRAWAL: "bg-red-500",
 	BONUS: "bg-blue-500",
 	PENALTY: "bg-red-500",
+	PROFIT: "bg-purple-500",
 } as const;
 
 // General Page Limit
 export const PAGE_LIMIT = 50;
+
+// User KYC
+export type KycStatus = "NOT STARTED" | "PENDING" | "VERIFIED" | "REJECTED";
+
+export const KYC_STYLES: Record<KycStatus, string> = {
+	"NOT STARTED": "bg-muted/50 text-muted-foreground border-border",
+	PENDING: "bg-amber-500/15 text-amber-400 border-amber-500/20",
+	VERIFIED: "bg-green-500/15 text-green-400 border-green-500/20",
+	REJECTED: "bg-destructive/15 text-destructive border-destructive/20",
+};
