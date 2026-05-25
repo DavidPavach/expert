@@ -38,7 +38,7 @@ export default function Pagination({
 	return (
 		<nav
 			aria-label="Pagination"
-			className={cn("flex justify-center items-center gap-1 my-4", className)}
+			className={cn("flex justify-center items-center gap-1 my-8", className)}
 		>
 			<Button
 				variant="ghost"

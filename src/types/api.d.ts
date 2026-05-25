@@ -166,6 +166,7 @@ declare type Transaction = {
 	updatedAt: string;
 	walletAddress?: string;
 	user: string;
+	_id: string;
 };
 
 declare type AdminTx = {
@@ -326,4 +327,21 @@ declare type NewTradePayload = {
 	leverage: string;
 	entryPrice: number;
 	expiration: Date;
+};
+
+// User Trade
+declare type Trade = {
+	_id: string;
+	user: string;
+	amount: number;
+	asset: string;
+	entryPrice: number;
+	leverage: string;
+	profit: number;
+	status: "OPEN" | "WON" | "LOST" | "CLOSED" | "CANCELLED";
+	tradeType: "BUY" | "SELL";
+	expiration: string;
+	createdAt: string;
+	updatedAt: string;
+	__v?: number;
 };

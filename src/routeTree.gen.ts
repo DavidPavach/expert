@@ -9,16 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as HomeRouteRouteImport } from './routes/_home/route'
 import { Route as DashboardRouteRouteImport } from './routes/_dashboard/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AdminRouteRouteImport } from './routes/_admin/route'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as DashboardWithdrawalRouteImport } from './routes/_dashboard/withdrawal'
 import { Route as DashboardSupportRouteImport } from './routes/_dashboard/support'
 import { Route as DashboardSectionRouteImport } from './routes/_dashboard/section'
 import { Route as DashboardReferralRouteImport } from './routes/_dashboard/referral'
 import { Route as DashboardProfileRouteImport } from './routes/_dashboard/profile'
 import { Route as DashboardMarketRouteImport } from './routes/_dashboard/market'
+import { Route as DashboardLogoutRouteImport } from './routes/_dashboard/logout'
 import { Route as DashboardKycRouteImport } from './routes/_dashboard/kyc'
 import { Route as DashboardHistoryRouteImport } from './routes/_dashboard/history'
 import { Route as DashboardDepositRouteImport } from './routes/_dashboard/deposit'
@@ -26,7 +28,6 @@ import { Route as DashboardDashboardRouteImport } from './routes/_dashboard/dash
 import { Route as DashboardCopyRouteImport } from './routes/_dashboard/copy'
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthOperationsRouteImport } from './routes/_auth/operations'
-import { Route as AuthLogoutRouteImport } from './routes/_auth/logout'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotRouteImport } from './routes/_auth/forgot'
 import { Route as AdminUsersRouteImport } from './routes/_admin/users'
@@ -40,6 +41,10 @@ import { Route as AdminNotifyRouteImport } from './routes/_admin/notify'
 import { Route as AdminMeRouteImport } from './routes/_admin/me'
 import { Route as AdminCopyTradingRouteImport } from './routes/_admin/copy-trading'
 
+const HomeRouteRoute = HomeRouteRouteImport.update({
+  id: '/_home',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/_dashboard',
   getParentRoute: () => rootRouteImport,
@@ -52,10 +57,10 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/_admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const HomeIndexRoute = HomeIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => HomeRouteRoute,
 } as any)
 const DashboardWithdrawalRoute = DashboardWithdrawalRouteImport.update({
   id: '/withdrawal',
@@ -85,6 +90,11 @@ const DashboardProfileRoute = DashboardProfileRouteImport.update({
 const DashboardMarketRoute = DashboardMarketRouteImport.update({
   id: '/market',
   path: '/market',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardLogoutRoute = DashboardLogoutRouteImport.update({
+  id: '/logout',
+  path: '/logout',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardKycRoute = DashboardKycRouteImport.update({
@@ -120,11 +130,6 @@ const AuthRegisterRoute = AuthRegisterRouteImport.update({
 const AuthOperationsRoute = AuthOperationsRouteImport.update({
   id: '/operations',
   path: '/operations',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthLogoutRoute = AuthLogoutRouteImport.update({
-  id: '/logout',
-  path: '/logout',
   getParentRoute: () => AuthRouteRoute,
 } as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
@@ -189,7 +194,7 @@ const AdminCopyTradingRoute = AdminCopyTradingRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof HomeIndexRoute
   '/copy-trading': typeof AdminCopyTradingRoute
   '/me': typeof AdminMeRoute
   '/notify': typeof AdminNotifyRoute
@@ -202,7 +207,6 @@ export interface FileRoutesByFullPath {
   '/users': typeof AdminUsersRoute
   '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
-  '/logout': typeof AuthLogoutRoute
   '/operations': typeof AuthOperationsRoute
   '/register': typeof AuthRegisterRoute
   '/copy': typeof DashboardCopyRoute
@@ -210,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/deposit': typeof DashboardDepositRoute
   '/history': typeof DashboardHistoryRoute
   '/kyc': typeof DashboardKycRoute
+  '/logout': typeof DashboardLogoutRoute
   '/market': typeof DashboardMarketRoute
   '/profile': typeof DashboardProfileRoute
   '/referral': typeof DashboardReferralRoute
@@ -218,7 +223,7 @@ export interface FileRoutesByFullPath {
   '/withdrawal': typeof DashboardWithdrawalRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof HomeIndexRoute
   '/copy-trading': typeof AdminCopyTradingRoute
   '/me': typeof AdminMeRoute
   '/notify': typeof AdminNotifyRoute
@@ -231,7 +236,6 @@ export interface FileRoutesByTo {
   '/users': typeof AdminUsersRoute
   '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
-  '/logout': typeof AuthLogoutRoute
   '/operations': typeof AuthOperationsRoute
   '/register': typeof AuthRegisterRoute
   '/copy': typeof DashboardCopyRoute
@@ -239,6 +243,7 @@ export interface FileRoutesByTo {
   '/deposit': typeof DashboardDepositRoute
   '/history': typeof DashboardHistoryRoute
   '/kyc': typeof DashboardKycRoute
+  '/logout': typeof DashboardLogoutRoute
   '/market': typeof DashboardMarketRoute
   '/profile': typeof DashboardProfileRoute
   '/referral': typeof DashboardReferralRoute
@@ -248,10 +253,10 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_admin': typeof AdminRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_dashboard': typeof DashboardRouteRouteWithChildren
+  '/_home': typeof HomeRouteRouteWithChildren
   '/_admin/copy-trading': typeof AdminCopyTradingRoute
   '/_admin/me': typeof AdminMeRoute
   '/_admin/notify': typeof AdminNotifyRoute
@@ -264,7 +269,6 @@ export interface FileRoutesById {
   '/_admin/users': typeof AdminUsersRoute
   '/_auth/forgot': typeof AuthForgotRoute
   '/_auth/login': typeof AuthLoginRoute
-  '/_auth/logout': typeof AuthLogoutRoute
   '/_auth/operations': typeof AuthOperationsRoute
   '/_auth/register': typeof AuthRegisterRoute
   '/_dashboard/copy': typeof DashboardCopyRoute
@@ -272,12 +276,14 @@ export interface FileRoutesById {
   '/_dashboard/deposit': typeof DashboardDepositRoute
   '/_dashboard/history': typeof DashboardHistoryRoute
   '/_dashboard/kyc': typeof DashboardKycRoute
+  '/_dashboard/logout': typeof DashboardLogoutRoute
   '/_dashboard/market': typeof DashboardMarketRoute
   '/_dashboard/profile': typeof DashboardProfileRoute
   '/_dashboard/referral': typeof DashboardReferralRoute
   '/_dashboard/section': typeof DashboardSectionRoute
   '/_dashboard/support': typeof DashboardSupportRoute
   '/_dashboard/withdrawal': typeof DashboardWithdrawalRoute
+  '/_home/': typeof HomeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -295,7 +301,6 @@ export interface FileRouteTypes {
     | '/users'
     | '/forgot'
     | '/login'
-    | '/logout'
     | '/operations'
     | '/register'
     | '/copy'
@@ -303,6 +308,7 @@ export interface FileRouteTypes {
     | '/deposit'
     | '/history'
     | '/kyc'
+    | '/logout'
     | '/market'
     | '/profile'
     | '/referral'
@@ -324,7 +330,6 @@ export interface FileRouteTypes {
     | '/users'
     | '/forgot'
     | '/login'
-    | '/logout'
     | '/operations'
     | '/register'
     | '/copy'
@@ -332,6 +337,7 @@ export interface FileRouteTypes {
     | '/deposit'
     | '/history'
     | '/kyc'
+    | '/logout'
     | '/market'
     | '/profile'
     | '/referral'
@@ -340,10 +346,10 @@ export interface FileRouteTypes {
     | '/withdrawal'
   id:
     | '__root__'
-    | '/'
     | '/_admin'
     | '/_auth'
     | '/_dashboard'
+    | '/_home'
     | '/_admin/copy-trading'
     | '/_admin/me'
     | '/_admin/notify'
@@ -356,7 +362,6 @@ export interface FileRouteTypes {
     | '/_admin/users'
     | '/_auth/forgot'
     | '/_auth/login'
-    | '/_auth/logout'
     | '/_auth/operations'
     | '/_auth/register'
     | '/_dashboard/copy'
@@ -364,23 +369,32 @@ export interface FileRouteTypes {
     | '/_dashboard/deposit'
     | '/_dashboard/history'
     | '/_dashboard/kyc'
+    | '/_dashboard/logout'
     | '/_dashboard/market'
     | '/_dashboard/profile'
     | '/_dashboard/referral'
     | '/_dashboard/section'
     | '/_dashboard/support'
     | '/_dashboard/withdrawal'
+    | '/_home/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  HomeRouteRoute: typeof HomeRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_home': {
+      id: '/_home'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof HomeRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_dashboard': {
       id: '/_dashboard'
       path: ''
@@ -402,12 +416,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_home/': {
+      id: '/_home/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof HomeIndexRouteImport
+      parentRoute: typeof HomeRouteRoute
     }
     '/_dashboard/withdrawal': {
       id: '/_dashboard/withdrawal'
@@ -449,6 +463,13 @@ declare module '@tanstack/react-router' {
       path: '/market'
       fullPath: '/market'
       preLoaderRoute: typeof DashboardMarketRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/logout': {
+      id: '/_dashboard/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof DashboardLogoutRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/_dashboard/kyc': {
@@ -498,13 +519,6 @@ declare module '@tanstack/react-router' {
       path: '/operations'
       fullPath: '/operations'
       preLoaderRoute: typeof AuthOperationsRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/logout': {
-      id: '/_auth/logout'
-      path: '/logout'
-      fullPath: '/logout'
-      preLoaderRoute: typeof AuthLogoutRouteImport
       parentRoute: typeof AuthRouteRoute
     }
     '/_auth/login': {
@@ -627,7 +641,6 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 interface AuthRouteRouteChildren {
   AuthForgotRoute: typeof AuthForgotRoute
   AuthLoginRoute: typeof AuthLoginRoute
-  AuthLogoutRoute: typeof AuthLogoutRoute
   AuthOperationsRoute: typeof AuthOperationsRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
 }
@@ -635,7 +648,6 @@ interface AuthRouteRouteChildren {
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthForgotRoute: AuthForgotRoute,
   AuthLoginRoute: AuthLoginRoute,
-  AuthLogoutRoute: AuthLogoutRoute,
   AuthOperationsRoute: AuthOperationsRoute,
   AuthRegisterRoute: AuthRegisterRoute,
 }
@@ -650,6 +662,7 @@ interface DashboardRouteRouteChildren {
   DashboardDepositRoute: typeof DashboardDepositRoute
   DashboardHistoryRoute: typeof DashboardHistoryRoute
   DashboardKycRoute: typeof DashboardKycRoute
+  DashboardLogoutRoute: typeof DashboardLogoutRoute
   DashboardMarketRoute: typeof DashboardMarketRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardReferralRoute: typeof DashboardReferralRoute
@@ -664,6 +677,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardDepositRoute: DashboardDepositRoute,
   DashboardHistoryRoute: DashboardHistoryRoute,
   DashboardKycRoute: DashboardKycRoute,
+  DashboardLogoutRoute: DashboardLogoutRoute,
   DashboardMarketRoute: DashboardMarketRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardReferralRoute: DashboardReferralRoute,
@@ -676,11 +690,23 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
   DashboardRouteRouteChildren,
 )
 
+interface HomeRouteRouteChildren {
+  HomeIndexRoute: typeof HomeIndexRoute
+}
+
+const HomeRouteRouteChildren: HomeRouteRouteChildren = {
+  HomeIndexRoute: HomeIndexRoute,
+}
+
+const HomeRouteRouteWithChildren = HomeRouteRoute._addFileChildren(
+  HomeRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  HomeRouteRoute: HomeRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

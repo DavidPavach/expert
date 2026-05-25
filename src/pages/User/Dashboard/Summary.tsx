@@ -100,7 +100,7 @@ export default function Summary() {
 				<p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm">
 					Total Locked Up Funds:{" "}
 					<span className="text-primary">
-						{formatCurrency(userBalances.totalLockedFunds)}
+						{formatCurrency(userBalances.totalLockedFunds || 0)}
 					</span>
 				</p>
 

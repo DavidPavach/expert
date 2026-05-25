@@ -1,3 +1,4 @@
+import TradeHistory from "../History/TradeHistory";
 import CreateTradeForm from "../Market/Form";
 import QuickTradeCard from "./Quick";
 import ReferralBox from "./Referral";
@@ -13,6 +14,7 @@ const index = () => {
 			<section className="flex min-[600px]:flex-row flex-col gap-5">
 				<div className="bg-card p-4 border border-card rounded-2xl w-full md:w-1/2 lg:w-[60%] h-fit min-h-100">
 					<Widget />
+					<TradeHistory />
 				</div>
 				<div className="space-y-5 w-full md:w-1/2 lg:w-[40%]">
 					<QuickTradeCard />

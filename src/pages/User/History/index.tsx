@@ -1,6 +1,9 @@
 import { ReceiptItem } from "iconsax-reactjs";
 import { useState } from "react";
-import CopyTradeHistory from "./CopyTradeHistory";
+import Deposit from "./Deposit";
+import Others from "./Others";
+import TradeHistory from "./TradeHistory";
+import Withdrawal from "./Withdrawal";
 
 type TransactionTab = "deposit" | "withdrawal" | "copy" | "trade" | "others";
 
@@ -17,10 +20,6 @@ const TABS: {
 		label: "Withdrawal",
 	},
 	{
-		id: "copy",
-		label: "Copy Trading",
-	},
-	{
 		id: "trade",
 		label: "Trade",
 	},
@@ -34,8 +33,8 @@ const index = () => {
 	const [activeTab, setActiveTab] = useState<TransactionTab>("deposit");
 
 	return (
-		<main>
-			<header className="flex items-start gap-4 mb-8 md:mb-10">
+		<main className="py-5">
+			<header className="flex items-center gap-4 mb-8 md:mb-10">
 				<div className="flex justify-center items-center bg-primary/10 rounded-2xl size-14 md:size-16 shrink-0">
 					<ReceiptItem className="size-6 md:size-7 xl:size-8 text-primary" />
 				</div>
@@ -64,8 +63,10 @@ const index = () => {
 					</button>
 				))}
 			</section>
-			{activeTab === "copy" && <CopyTradeHistory />}
-			{activeTab === "trade" && <CopyTradeHistory />}
+			{activeTab === "deposit" && <Deposit />}
+			{activeTab === "withdrawal" && <Withdrawal />}
+			{activeTab === "trade" && <TradeHistory />}
+			{activeTab === "others" && <Others />}
 		</main>
 	);
 };

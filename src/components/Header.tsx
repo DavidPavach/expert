@@ -10,10 +10,10 @@ import {
 	ReceiptText,
 } from "iconsax-reactjs";
 import { useEffect, useRef, useState } from "react";
-
+import { useBalanceStore } from "#/stores/dashboard.store";
 // Stores
 import { useMeStore } from "#/stores/me.store";
-
+import { formatCurrency } from "#/utils/format";
 // Components
 import { ThemeToggle } from "./ThemeToggle";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -21,6 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 export default function Header() {
 	const navigate = useNavigate();
 	const { user } = useMeStore();
+	const { stats } = useBalanceStore();
 	const [open, setOpen] = useState(false);
 
 	const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -42,7 +43,7 @@ export default function Header() {
 
 	const handleLogout = () => {
 		navigate({
-			to: "/login",
+			to: "/logout",
 		});
 	};
 
@@ -63,7 +64,7 @@ export default function Header() {
 						</p>
 
 						<h2 className="font-bold text-primary-foreground text-lg montserrat">
-							$0.00
+							{formatCurrency(stats?.availableBalance || 0)}
 						</h2>
 					</section>
 				</div>
@@ -132,7 +133,7 @@ export default function Header() {
 								<div>
 									<h2 className="font-semibold capitalize">{user?.fullName}</h2>
 									<p className="font-semibold text-primary text-sm md:text-base xl:text-lg">
-										$0.00
+										{formatCurrency(stats?.availableBalance || 0)}
 									</p>
 								</div>
 							</div>

@@ -138,6 +138,12 @@ export const getTrades = async (page: number, limit: number) => {
 	return response.data;
 };
 
+// Log Out
+export const logout = async () => {
+	const response = await axiosInstance.post(`auth/logout`);
+	return response.data;
+};
+
 // Admin APIs
 
 // Create New Admin
