@@ -22,27 +22,52 @@ const index = () => {
 
 	// Functions
 	const update = (field: string, value: string | boolean | number) => {
-		const result = loginSchema.safeParse(formData);
+		const updatedForm = {
+			...formData,
+			[field]: value,
+		};
+
+		const result = loginSchema.safeParse(updatedForm);
 
 		if (!result.success) {
 			const fieldErrors: Record<string, string> = {};
 
 			result.error.issues.forEach((issue) => {
-				const field = issue.path[0];
-				if (typeof field === "string") {
-					fieldErrors[field] = issue.message;
+				const issueField = issue.path[0];
+
+				if (typeof issueField === "string") {
+					fieldErrors[issueField] = issue.message;
 				}
 			});
-			setFormErrors({ [field]: fieldErrors[field] });
+
+			setFormErrors(fieldErrors);
 		} else {
 			setFormErrors({});
 		}
-		setFormData((prev) => ({ ...prev, [field]: value }));
+
+		setFormData(updatedForm);
 	};
 
 	const auth = useAuth();
 	const handleSubmit = () => {
 		if (Object.keys(formErrors).length > 0) {
+			return toast.error("Kindly fill the form properly before you proceed");
+		}
+		const validationResult = loginSchema.safeParse(formData);
+
+		if (!validationResult.success) {
+			const fieldErrors: Record<string, string> = {};
+
+			validationResult.error.issues.forEach((issue) => {
+				const field = issue.path[0];
+
+				if (typeof field === "string") {
+					fieldErrors[field] = issue.message;
+				}
+			});
+
+			setFormErrors(fieldErrors);
+
 			return toast.error("Kindly fill the form properly before you proceed");
 		}
 		const parser = new UAParser();
