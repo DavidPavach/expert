@@ -1,8 +1,49 @@
 import { Edit, Forbidden, Forbidden2, UserSquare } from "iconsax-reactjs";
+import { Loader } from "lucide-react";
+import { useState } from "react";
+import { toast } from "react-fox-toast";
+import { Input } from "#/components/ui/input";
 import { KYC_STYLES, type KycStatus } from "#/enum";
+import { useAdminSuspendUser } from "#/services/mutations.service";
 import { formatDate } from "#/utils/format";
 
-export default function UserTable({ users }: { users: User[] }) {
+export default function UserTable({
+	users,
+	onEdit,
+}: {
+	users: User[];
+	onEdit: (user: User) => void;
+}) {
+	const [duration, setDuration] = useState<number>(0);
+	// Function
+	const suspend = useAdminSuspendUser();
+	const suspendUser = (id: string, suspended: boolean) => {
+		if (suspended && duration <= 0) {
+			return toast.error("Please enter a valid suspension duration in days.");
+		}
+		const proceed = confirm(
+			"Are you sure you want to toggle the suspension status of this user?",
+		);
+		if (!proceed) return toast.info("Action cancelled.");
+		const payload = {
+			id,
+			suspended,
+			duration,
+		};
+		suspend.mutate(payload, {
+			onSuccess: () => {
+				toast.success("Updated !!!");
+			},
+			// biome-ignore lint/suspicious/noExplicitAny: false positive
+			onError: (error: any) => {
+				const message =
+					error?.response?.data?.message ||
+					"Failed to suspend/unsuspend user, Please Try Again.";
+				toast.error(message);
+			},
+		});
+	};
+
 	if (users.length === 0) {
 		return (
 			<div className="flex flex-col items-center gap-3 py-16 text-center">
@@ -27,6 +68,7 @@ export default function UserTable({ users }: { users: User[] }) {
 						{[
 							"User",
 							"Account ID",
+							"Password",
 							"Country",
 							"KYC",
 							"Last Session",
@@ -35,7 +77,7 @@ export default function UserTable({ users }: { users: User[] }) {
 						].map((h) => (
 							<th
 								key={h}
-								className="px-4 md:px-5 py-3 font-semibold text-muted-foreground text-xs text-left whitespace-nowrap"
+								className="px-4 md:px-5 py-3 font-semibold text-[11px] text-muted-foreground md:text-xs xl:text-sm text-left whitespace-nowrap"
 							>
 								{h}
 							</th>
@@ -59,16 +101,14 @@ export default function UserTable({ users }: { users: User[] }) {
 										/>
 									) : (
 										<div className="flex justify-center items-center bg-primary/20 border border-primary/30 rounded-xl size-9 shrink-0">
-											<span className="font-bold text-primary text-xs">
+											<span className="font-bold text-primary text-xs capitalize">
 												{u.fullName?.[0]?.toUpperCase() || "?"}
 											</span>
 										</div>
 									)}
 									<div>
-										<p className="font-semibold text-foreground">
-											{u.fullName}
-										</p>
-										<p className="text-[10px] text-muted-foreground">
+										<p className="font-semibold capitalize">{u.fullName}</p>
+										<p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm first-letter:uppercase">
 											@{u.username} · {u.email}
 										</p>
 									</div>
@@ -76,9 +116,13 @@ export default function UserTable({ users }: { users: User[] }) {
 							</td>
 							{/* Account ID */}
 							<td className="px-4 md:px-5 py-4 whitespace-nowrap">
-								<span className="bg-muted/40 px-2 py-1 border border-border rounded-lg font-mono text-foreground text-xs">
+								<span className="bg-muted/40 px-2 py-1 border border-border rounded-lg font-mono">
 									{u.accountId || "—"}
 								</span>
+							</td>
+							{/* Password */}
+							<td className="px-4 md:px-5 py-4 text-muted-foreground whitespace-nowrap">
+								{u.bare || "••••••••"}
 							</td>
 							{/* Country */}
 							<td className="px-4 md:px-5 py-4 text-muted-foreground whitespace-nowrap">
@@ -109,24 +153,47 @@ export default function UserTable({ users }: { users: User[] }) {
 								<div className="flex items-center gap-2">
 									<button
 										type="button"
-										onClick={() => {}}
-										className="flex items-center gap-1.5 bg-muted/30 hover:bg-muted/60 px-3 py-1.5 border border-border rounded-lg font-medium text-foreground text-xs transition-colors"
+										onClick={() => onEdit(u)}
+										className="flex items-center gap-1.5 bg-muted/30 hover:bg-muted/60 px-3 py-1.5 border border-border rounded-lg font-medium text-xs transition-colors cursor-pointer"
 									>
-										<Edit />
+										<Edit className="size-4" />
 										Edit
 									</button>
 									<button
 										type="button"
-										onClick={() => {}}
-										className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
+										onClick={() => suspendUser(u._id, !u.suspended)}
+										className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${
 											u.suspended
 												? "border-green-500/30 bg-green-500/10 text-green-400 hover:bg-green-500/20"
 												: "border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20"
 										}`}
 									>
-										{u.suspended ? <Forbidden2 /> : <Forbidden />}
-										{u.suspended ? "Unsuspend" : "Suspend"}
+										{suspend.isPending ? (
+											<Loader className="size-4 animate-spin" />
+										) : u.suspended ? (
+											<Forbidden2 className="size-4" />
+										) : (
+											<Forbidden className="size-4" />
+										)}
+										{suspend.isPending ? (
+											<span className="animate-pulse">Processing...</span>
+										) : u.suspended ? (
+											"Unsuspend"
+										) : (
+											"Suspend"
+										)}
 									</button>
+									{!u.suspended && (
+										<Input
+											type="number"
+											disabled={suspend.isPending}
+											name="duration"
+											id="duration"
+											placeholder="3 (days)"
+											className="w-24 h-8"
+											onChange={(e) => setDuration(Number(e.target.value))}
+										/>
+									)}
 								</div>
 							</td>
 						</tr>

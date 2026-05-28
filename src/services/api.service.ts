@@ -152,6 +152,24 @@ export const newAdmin = async (data: NewAdminPayload) => {
 	return response.data;
 };
 
+// Fetch Current Admin
+export const currentAdmin = async () => {
+	const response = await axiosInstance.get("admins/fetch");
+	return response.data;
+};
+
+// Fetch All Admin
+export const fetchAdmins = async () => {
+	const response = await axiosInstance.get(`admins/fetch/all`);
+	return response.data;
+};
+
+// Edit an Admin
+export const editAdmin = async (id: string, data: UpdateAdminPayload) => {
+	const response = await axiosInstance.patch(`admins/update/${id}`, data);
+	return response.data;
+};
+
 // Auth Admin
 export const authAdmin = async (data: AuthPayload) => {
 	const response = await axiosInstance.post("auth/operations", data);
@@ -244,12 +262,6 @@ export const fetchUsers = async (page: number, limit: number) => {
 	return response.data;
 };
 
-// Edit Copy Trading
-export const editCopy = async (id: string, data: EditCopyPayload) => {
-	const response = await axiosInstance.patch(`copy/update/${id}`, data);
-	return response.data;
-};
-
 // Fetch All Kycs
 export const fetchKycs = async (page: number, limit: number) => {
 	const response = await axiosInstance.get(
@@ -267,5 +279,68 @@ export const updateKyc = async (id: string, data: Partial<NewKycPayload>) => {
 // Delete User Kyc
 export const deleteKyc = async (id: string) => {
 	const response = await axiosInstance.delete(`kyc/delete/user/${id}`);
+	return response.data;
+};
+
+// Admin Copy Trading
+export const fetchAllCopyTrading = async (page: number, limit: number) => {
+	const response = await axiosInstance.get(
+		`copy/getAll?page=${page}&limit=${limit}`,
+	);
+	return response.data;
+};
+
+// Edit Copy Trading
+export const updateCopyTrading = async (id: string, data: EditCopyPayload) => {
+	const response = await axiosInstance.patch(`copy/update/${id}`, data);
+	return response.data;
+};
+
+// Delete Copy Trading Entry
+export const deleteCopyTradingEntry = async (data: {
+	copyTradingId: string;
+	entryId: string;
+}) => {
+	const response = await axiosInstance.delete(`copy/removeEntry`, { data });
+	return response.data;
+};
+
+// Update Copy Trading Entry
+export const updateCopyTradingEntry = async (
+	copyTradingId: string,
+	entryId: string,
+	data: Partial<Entry>,
+) => {
+	const response = await axiosInstance.patch(
+		`copy/updateEntry/${copyTradingId}/${entryId}`,
+		data,
+	);
+	return response.data;
+};
+
+// Update a User
+export const updateUser = async (id: string, data: UserPayload) => {
+	const response = await axiosInstance.patch(`users/update/user/${id}`, data);
+	return response.data;
+};
+
+// Suspend or Unsuspend a User
+export const toggleSuspendUser = async (
+	id: string,
+	suspend: boolean,
+	duration: number,
+) => {
+	const response = await axiosInstance.patch(`users/suspend/${id}`, {
+		suspended: suspend,
+		duration: duration,
+	});
+	return response.data;
+};
+
+// Get All Trades
+export const getAllTrades = async (page: number, limit: number) => {
+	const response = await axiosInstance.get(
+		`trades/getAll?page=${page}&limit=${limit}`,
+	);
 	return response.data;
 };

@@ -2,6 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	Candle,
+	CardCoin,
 	Element4,
 	Home3,
 	type Icon,
@@ -48,6 +49,7 @@ const NAV_SECTIONS: NavSection[] = [
 		links: [
 			{ href: "/copy-trading", icon: Candle, label: "Copy Trading" },
 			{ href: "/traders", icon: Trade, label: "Traders" },
+			{ href: "/trades", icon: CardCoin, label: "Trades" },
 		],
 	},
 	{

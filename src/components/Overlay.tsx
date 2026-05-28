@@ -101,7 +101,7 @@ export const Overlay = ({
 						onClick={(e) => e.stopPropagation()}
 					>
 						<div
-							className={`${variant === "bottom" ? "rounded-t-2xl" : "rounded-2xl"} bg-card shadow-lg mx-auto p-4 md:p-6 xl:p-8 border border-border  w-full overflow-y-auto text-card-foreground hide-scrollbar ${classNames}`}
+							className={`${variant === "bottom" ? "rounded-t-2xl" : "rounded-2xl"} bg-card shadow-lg mx-auto p-4 md:p-6 xl:p-8 border border-border w-full overflow-y-auto text-card-foreground hide-scrollbar ${classNames}`}
 						>
 							{children}
 						</div>

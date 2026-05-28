@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import CopyTrading from "@/pages/Admin/CopyTrading";
+import Trades from "@/pages/Admin/Trades";
 import { APP_NAME } from "../__root";
 
-export const Route = createFileRoute("/_admin/copy-trading")({
+export const Route = createFileRoute("/_admin/trades")({
 	head: () => ({
 		meta: [
 			{
-				title: `Copy Trading | ${APP_NAME}`,
+				title: `Trades | ${APP_NAME}`,
 			},
 		],
 	}),
@@ -14,5 +14,5 @@ export const Route = createFileRoute("/_admin/copy-trading")({
 });
 
 function RouteComponent() {
-	return <CopyTrading />;
+	return <Trades />;
 }

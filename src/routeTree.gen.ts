@@ -34,6 +34,7 @@ import { Route as AdminUsersRouteImport } from './routes/_admin/users'
 import { Route as AdminUserReferralsRouteImport } from './routes/_admin/user-referrals'
 import { Route as AdminUserKycRouteImport } from './routes/_admin/user-kyc'
 import { Route as AdminTransactionsRouteImport } from './routes/_admin/transactions'
+import { Route as AdminTradesRouteImport } from './routes/_admin/trades'
 import { Route as AdminTradersRouteImport } from './routes/_admin/traders'
 import { Route as AdminStaffRouteImport } from './routes/_admin/staff'
 import { Route as AdminSettingsRouteImport } from './routes/_admin/settings'
@@ -162,6 +163,11 @@ const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
   path: '/transactions',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminTradesRoute = AdminTradesRouteImport.update({
+  id: '/trades',
+  path: '/trades',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminTradersRoute = AdminTradersRouteImport.update({
   id: '/traders',
   path: '/traders',
@@ -201,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AdminSettingsRoute
   '/staff': typeof AdminStaffRoute
   '/traders': typeof AdminTradersRoute
+  '/trades': typeof AdminTradesRoute
   '/transactions': typeof AdminTransactionsRoute
   '/user-kyc': typeof AdminUserKycRoute
   '/user-referrals': typeof AdminUserReferralsRoute
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AdminSettingsRoute
   '/staff': typeof AdminStaffRoute
   '/traders': typeof AdminTradersRoute
+  '/trades': typeof AdminTradesRoute
   '/transactions': typeof AdminTransactionsRoute
   '/user-kyc': typeof AdminUserKycRoute
   '/user-referrals': typeof AdminUserReferralsRoute
@@ -263,6 +271,7 @@ export interface FileRoutesById {
   '/_admin/settings': typeof AdminSettingsRoute
   '/_admin/staff': typeof AdminStaffRoute
   '/_admin/traders': typeof AdminTradersRoute
+  '/_admin/trades': typeof AdminTradesRoute
   '/_admin/transactions': typeof AdminTransactionsRoute
   '/_admin/user-kyc': typeof AdminUserKycRoute
   '/_admin/user-referrals': typeof AdminUserReferralsRoute
@@ -295,6 +304,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/staff'
     | '/traders'
+    | '/trades'
     | '/transactions'
     | '/user-kyc'
     | '/user-referrals'
@@ -324,6 +334,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/staff'
     | '/traders'
+    | '/trades'
     | '/transactions'
     | '/user-kyc'
     | '/user-referrals'
@@ -356,6 +367,7 @@ export interface FileRouteTypes {
     | '/_admin/settings'
     | '/_admin/staff'
     | '/_admin/traders'
+    | '/_admin/trades'
     | '/_admin/transactions'
     | '/_admin/user-kyc'
     | '/_admin/user-referrals'
@@ -563,6 +575,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTransactionsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_admin/trades': {
+      id: '/_admin/trades'
+      path: '/trades'
+      fullPath: '/trades'
+      preLoaderRoute: typeof AdminTradesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/_admin/traders': {
       id: '/_admin/traders'
       path: '/traders'
@@ -615,6 +634,7 @@ interface AdminRouteRouteChildren {
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStaffRoute: typeof AdminStaffRoute
   AdminTradersRoute: typeof AdminTradersRoute
+  AdminTradesRoute: typeof AdminTradesRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminUserKycRoute: typeof AdminUserKycRoute
   AdminUserReferralsRoute: typeof AdminUserReferralsRoute
@@ -628,6 +648,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminSettingsRoute: AdminSettingsRoute,
   AdminStaffRoute: AdminStaffRoute,
   AdminTradersRoute: AdminTradersRoute,
+  AdminTradesRoute: AdminTradesRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminUserKycRoute: AdminUserKycRoute,
   AdminUserReferralsRoute: AdminUserReferralsRoute,

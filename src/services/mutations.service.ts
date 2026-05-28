@@ -9,11 +9,13 @@ import {
 	authAdmin,
 	authUser,
 	createUser,
+	deleteCopyTradingEntry,
 	deleteDepositCoin,
 	deleteKyc,
 	deleteTrader,
 	deleteTx,
 	deleteWithdrawalCoin,
+	editAdmin,
 	editTx,
 	newAdmin,
 	newCopyTrading,
@@ -22,10 +24,14 @@ import {
 	newTrader,
 	newTransaction,
 	stopCopyTrading,
+	toggleSuspendUser,
+	updateCopyTrading,
+	updateCopyTradingEntry,
 	updateKyc,
 	updateProfile,
 	updateSettings,
 	updateTrader,
+	updateUser,
 } from "./api.service";
 
 // Create User
@@ -183,7 +189,23 @@ export function useNewAdmin() {
 			console.error("Admin Creation failed:", error);
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["admins"] });
+			queryClient.invalidateQueries({ queryKey: ["allAdmins"] });
+		},
+	});
+}
+
+// Edit Admin
+type EditAdminVariables = { id: string; data: UpdateAdminPayload };
+export function useAdminUpdate() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (vars: EditAdminVariables) => editAdmin(vars.id, vars.data),
+		onError: (error) => {
+			console.error("Admin Editing failed:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["allAdmins"] });
 		},
 	});
 }
@@ -380,6 +402,116 @@ export function useAdminDeleteKyc() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["kycs"],
+			});
+		},
+	});
+}
+
+// Update Copy Trading
+type UpdateCopyTradingVariables = { id: string; data: EditCopyPayload };
+export function useAdminUpdateCopyTrading() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (vars: UpdateCopyTradingVariables) => {
+			return updateCopyTrading(vars.id, vars.data);
+		},
+		onError: (error) => {
+			console.error("Failed to update copy trading:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["allCopyTrading"],
+			});
+		},
+	});
+}
+
+// Delete Copy Trading Entry
+type DeleteCopyTradingEntryVariables = {
+	copyTradingId: string;
+	entryId: string;
+};
+export function useAdminDeleteCopyTradingEntry() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (vars: DeleteCopyTradingEntryVariables) => {
+			return deleteCopyTradingEntry(vars);
+		},
+		onError: (error) => {
+			console.error("Failed to delete copy trading entry:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["allCopyTrading"],
+			});
+		},
+	});
+}
+
+// Update Copy Trading Entry
+type UpdateCopyTradingEntryVariables = {
+	copyTradingId: string;
+	entryId: string;
+	data: Partial<Entry>;
+};
+export function useAdminUpdateCopyTradingEntry() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (vars: UpdateCopyTradingEntryVariables) => {
+			return updateCopyTradingEntry(
+				vars.copyTradingId,
+				vars.entryId,
+				vars.data,
+			);
+		},
+		onError: (error) => {
+			console.error("Failed to update copy trading entry:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["allCopyTrading"],
+			});
+		},
+	});
+}
+
+// Update a User
+type UpdateUserVariables = { id: string; data: UserPayload };
+export function useAdminUpdateUser() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (vars: UpdateUserVariables) => {
+			return updateUser(vars.id, vars.data);
+		},
+		onError: (error) => {
+			console.error("Failed to update user:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["users"],
+			});
+		},
+	});
+}
+
+// Suspend or Unsuspend a User
+type SuspendUserVariables = {
+	id: string;
+	suspended: boolean;
+	duration: number;
+};
+export function useAdminSuspendUser() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (vars: SuspendUserVariables) => {
+			return toggleSuspendUser(vars.id, vars.suspended, vars.duration);
+		},
+		onError: (error) => {
+			console.error("Failed to suspend/unsuspend user:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["users"],
 			});
 		},
 	});

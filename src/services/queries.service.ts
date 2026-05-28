@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
 import {
+	currentAdmin,
 	currentUser,
 	dashboardStats,
+	fetchAdmins,
+	fetchAllCopyTrading,
 	fetchKyc,
 	fetchKycs,
 	fetchPrices,
@@ -13,6 +16,7 @@ import {
 	fetchUser,
 	fetchUserCopyTrading,
 	fetchUsers,
+	getAllTrades,
 	getTrades,
 	userTransaction,
 } from "./api.service";
@@ -136,3 +140,35 @@ export function useAllKycs(page: number, limit: number) {
 		queryFn: () => fetchKycs(page, limit),
 	});
 }
+
+// Fetch admin Copy Trading
+export function useFetchCopyTrading(page: number, limit: number) {
+	return useQuery({
+		queryKey: ["allCopyTrading"],
+		queryFn: () => fetchAllCopyTrading(page, limit),
+	});
+}
+
+// Fetch all Trades
+export const useFetchTrades = (page: number, limit: number) => {
+	return useQuery({
+		queryKey: ["allTrades", page, limit],
+		queryFn: () => getAllTrades(page, limit),
+	});
+};
+
+// Fetch all Admin
+export const useFetchAdmin = () => {
+	return useQuery({
+		queryKey: ["allAdmins"],
+		queryFn: () => fetchAdmins(),
+	});
+};
+
+// Fetch Current Admin
+export const useCurrentAdmin = () => {
+	return useQuery({
+		queryKey: ["currentAdmin"],
+		queryFn: () => currentAdmin(),
+	});
+};

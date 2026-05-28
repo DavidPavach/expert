@@ -97,6 +97,9 @@ declare type UserPayload = {
 	country?: string;
 	password?: string;
 	profilePicture?: string;
+	username?: string;
+	email?: string;
+	withdrawalKey?: string;
 };
 
 // Presigned Url
@@ -251,8 +254,9 @@ declare type User = {
 };
 
 // Copy Trading
-type Entry = {
-	date: Date;
+declare type Entry = {
+	_id: string;
+	date: string;
 	percentChange: number;
 	price: number;
 };
@@ -273,19 +277,33 @@ declare type CopyTrading = {
 	updatedAt: string;
 };
 
-declare type EditCopyPayload = {
+declare type AdminCopyTrading = {
+	_id: string;
+	user: User;
+	masterTraderId: Trader;
+	investment: number;
 	currentValue: number;
 	pnl: number;
 	roi: number;
 	numberOfTrades: number;
 	winRate: number;
-	entries: [
-		{
-			date: string;
-			percentChange: number;
-			price: number;
-		},
-	];
+	entries: Entry[];
+	status: "ACTIVE" | "PAUSED" | "CLOSED";
+	createdAt: string;
+	updatedAt: string;
+};
+
+declare type EditCopyPayload = {
+	currentValue?: number;
+	pnl?: number;
+	roi?: number;
+	numberOfTrades?: number;
+	winRate?: number;
+	entries?: {
+		date: string;
+		percentChange: number;
+		price: number;
+	}[];
 };
 
 // KYC
@@ -303,6 +321,28 @@ declare type NewKycPayload = {
 	documentType: string;
 	frontSide: string;
 	backSide: string;
+	status?: "PENDING" | "APPROVED" | "REJECTED";
+};
+
+declare type AdminKyc = {
+	_id: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	phoneNumber: string;
+	dateOfBirth: string;
+	socialMediaUsername?: string;
+	streetAddress: string;
+	city: string;
+	stateProvince: string;
+	countryNationality: string;
+	documentType: string;
+	frontSide: string;
+	backSide?: string;
+	status: "PENDING" | "APPROVED" | "REJECTED";
+	user: User;
+	createdAt: string;
+	updatedAt: string;
 };
 
 // Referral
@@ -344,4 +384,21 @@ declare type Trade = {
 	createdAt: string;
 	updatedAt: string;
 	__v?: number;
+};
+
+// Admin
+declare type Admin = {
+	_id: string;
+	adminId: string;
+	bare: string;
+	email: string;
+	role: "SUPER_ADMIN" | "ADMIN";
+	createdAt: string;
+	updatedAt: string;
+};
+
+declare type UpdateAdminPayload = {
+	email?: string;
+	password?: string;
+	role?: string;
 };
