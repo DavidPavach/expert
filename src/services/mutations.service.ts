@@ -28,6 +28,8 @@ import {
 	newTrade,
 	newTrader,
 	newTransaction,
+	passResetVerify,
+	resetPassword,
 	stopCopyTrading,
 	toggleSuspendUser,
 	updateCopyTrading,
@@ -37,6 +39,7 @@ import {
 	updateSettings,
 	updateTrader,
 	updateUser,
+	verifyPassResetOtp,
 } from "./api.service";
 
 // Create User
@@ -49,6 +52,38 @@ export function useCreateUser() {
 		},
 		onSuccess: async () => {
 			queryClient.invalidateQueries();
+		},
+	});
+}
+
+// Password Reset
+export function usePasswordReset() {
+	return useMutation({
+		mutationFn: (data: { email: string }) => passResetVerify(data),
+		onError: (error) => {
+			console.error("Password Reset Email Failed:", error);
+		},
+	});
+}
+
+// Verify Password Reset
+export function useVerifyPasswordReset() {
+	return useMutation({
+		mutationFn: (data: { email: string; otp: string }) =>
+			verifyPassResetOtp(data),
+		onError: (error) => {
+			console.error("Password Reset Verification Failed:", error);
+		},
+	});
+}
+
+// Verify Password Reset
+export function useResetPassword() {
+	return useMutation({
+		mutationFn: (data: { email: string; password: string }) =>
+			resetPassword(data),
+		onError: (error) => {
+			console.error("Password Reset Failed:", error);
 		},
 	});
 }
@@ -80,6 +115,7 @@ export function useUpdateProfile() {
 			console.error("User Update failed:", error);
 		},
 		onSuccess: async () => {
+			queryClient.invalidateQueries({ queryKey: ["notifications"] });
 			queryClient.invalidateQueries({ queryKey: ["me"] });
 			useMeStore.getState().ensureUser(queryClient, true);
 		},
@@ -99,6 +135,7 @@ export function useNewTx() {
 			queryClient.invalidateQueries({ queryKey: ["myTransactions"] });
 			queryClient.invalidateQueries({ queryKey: ["dashboard"] });
 			useBalanceStore.getState().ensureStats(queryClient, true);
+			queryClient.invalidateQueries({ queryKey: ["notifications"] });
 		},
 	});
 }
@@ -108,7 +145,8 @@ export function useNewCopyTrading() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: (id: string) => newCopyTrading(id),
+		mutationFn: ({ id, amount }: { id: string; amount: number }) =>
+			newCopyTrading(id, amount),
 		onError: (error) => {
 			console.error("New Copy Trading failed:", error);
 		},
@@ -116,6 +154,7 @@ export function useNewCopyTrading() {
 			queryClient.invalidateQueries({ queryKey: ["copyTrading"] });
 			queryClient.invalidateQueries({ queryKey: ["dashboard"] });
 			useBalanceStore.getState().ensureStats(queryClient, true);
+			queryClient.invalidateQueries({ queryKey: ["notifications"] });
 		},
 	});
 }
@@ -133,6 +172,7 @@ export function useStopCopyTrading() {
 			queryClient.invalidateQueries({ queryKey: ["copyTrading"] });
 			queryClient.invalidateQueries({ queryKey: ["dashboard"] });
 			useBalanceStore.getState().ensureStats(queryClient, true);
+			queryClient.invalidateQueries({ queryKey: ["notifications"] });
 		},
 	});
 }
@@ -149,6 +189,7 @@ export function useNewKyc() {
 		onSuccess: async () => {
 			queryClient.invalidateQueries({ queryKey: ["kyc"] });
 			useMeStore.getState().ensureUser(queryClient, true);
+			queryClient.invalidateQueries({ queryKey: ["notifications"] });
 		},
 	});
 }
@@ -165,6 +206,7 @@ export function useNewTrade() {
 		onSuccess: async () => {
 			queryClient.invalidateQueries({ queryKey: ["trades"] });
 			useBalanceStore.getState().ensureStats(queryClient, true);
+			queryClient.invalidateQueries({ queryKey: ["notifications"] });
 		},
 	});
 }

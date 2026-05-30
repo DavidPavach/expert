@@ -61,22 +61,25 @@ const Experts = ({ onClose, ids }: { onClose: () => void; ids: string[] }) => {
 			);
 			return navigate({ to: "/deposit" });
 		}
-		newCopy.mutate(id, {
-			onSuccess: () => {
-				setUpdateId(null);
-				toast.success(
-					`You’re now copying ${name} — trades will be mirrored automatically.`,
-				);
+		newCopy.mutate(
+			{ id, amount },
+			{
+				onSuccess: () => {
+					setUpdateId(null);
+					toast.success(
+						`You’re now copying ${name} — trades will be mirrored automatically.`,
+					);
+				},
+				// biome-ignore lint/suspicious/noExplicitAny: false positives
+				onError: (error: any) => {
+					setUpdateId(null);
+					const message =
+						error?.response?.data?.message ||
+						`Failed to copy Trader. Kindly retry.`;
+					toast.error(message);
+				},
 			},
-			// biome-ignore lint/suspicious/noExplicitAny: false positives
-			onError: (error: any) => {
-				setUpdateId(null);
-				const message =
-					error?.response?.data?.message ||
-					`Failed to copy Trader. Kindly retry.`;
-				toast.error(message);
-			},
-		});
+		);
 	};
 
 	return (

@@ -14,6 +14,11 @@ import { Route as DashboardRouteRouteImport } from './routes/_dashboard/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AdminRouteRouteImport } from './routes/_admin/route'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
+import { Route as HomeTradingRouteImport } from './routes/_home/trading'
+import { Route as HomeEducationRouteImport } from './routes/_home/education'
+import { Route as HomeContactRouteImport } from './routes/_home/contact'
+import { Route as HomeCompanyRouteImport } from './routes/_home/company'
+import { Route as HomeAboutRouteImport } from './routes/_home/about'
 import { Route as DashboardWithdrawalRouteImport } from './routes/_dashboard/withdrawal'
 import { Route as DashboardSupportRouteImport } from './routes/_dashboard/support'
 import { Route as DashboardSectionRouteImport } from './routes/_dashboard/section'
@@ -62,6 +67,31 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
 const HomeIndexRoute = HomeIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
+const HomeTradingRoute = HomeTradingRouteImport.update({
+  id: '/trading',
+  path: '/trading',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
+const HomeEducationRoute = HomeEducationRouteImport.update({
+  id: '/education',
+  path: '/education',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
+const HomeContactRoute = HomeContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
+const HomeCompanyRoute = HomeCompanyRouteImport.update({
+  id: '/company',
+  path: '/company',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
+const HomeAboutRoute = HomeAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => HomeRouteRoute,
 } as any)
 const DashboardWithdrawalRoute = DashboardWithdrawalRouteImport.update({
@@ -235,6 +265,11 @@ export interface FileRoutesByFullPath {
   '/section': typeof DashboardSectionRoute
   '/support': typeof DashboardSupportRoute
   '/withdrawal': typeof DashboardWithdrawalRoute
+  '/about': typeof HomeAboutRoute
+  '/company': typeof HomeCompanyRoute
+  '/contact': typeof HomeContactRoute
+  '/education': typeof HomeEducationRoute
+  '/trading': typeof HomeTradingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
@@ -266,6 +301,11 @@ export interface FileRoutesByTo {
   '/section': typeof DashboardSectionRoute
   '/support': typeof DashboardSupportRoute
   '/withdrawal': typeof DashboardWithdrawalRoute
+  '/about': typeof HomeAboutRoute
+  '/company': typeof HomeCompanyRoute
+  '/contact': typeof HomeContactRoute
+  '/education': typeof HomeEducationRoute
+  '/trading': typeof HomeTradingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -301,6 +341,11 @@ export interface FileRoutesById {
   '/_dashboard/section': typeof DashboardSectionRoute
   '/_dashboard/support': typeof DashboardSupportRoute
   '/_dashboard/withdrawal': typeof DashboardWithdrawalRoute
+  '/_home/about': typeof HomeAboutRoute
+  '/_home/company': typeof HomeCompanyRoute
+  '/_home/contact': typeof HomeContactRoute
+  '/_home/education': typeof HomeEducationRoute
+  '/_home/trading': typeof HomeTradingRoute
   '/_home/': typeof HomeIndexRoute
 }
 export interface FileRouteTypes {
@@ -335,6 +380,11 @@ export interface FileRouteTypes {
     | '/section'
     | '/support'
     | '/withdrawal'
+    | '/about'
+    | '/company'
+    | '/contact'
+    | '/education'
+    | '/trading'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -366,6 +416,11 @@ export interface FileRouteTypes {
     | '/section'
     | '/support'
     | '/withdrawal'
+    | '/about'
+    | '/company'
+    | '/contact'
+    | '/education'
+    | '/trading'
   id:
     | '__root__'
     | '/_admin'
@@ -400,6 +455,11 @@ export interface FileRouteTypes {
     | '/_dashboard/section'
     | '/_dashboard/support'
     | '/_dashboard/withdrawal'
+    | '/_home/about'
+    | '/_home/company'
+    | '/_home/contact'
+    | '/_home/education'
+    | '/_home/trading'
     | '/_home/'
   fileRoutesById: FileRoutesById
 }
@@ -445,6 +505,41 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof HomeIndexRouteImport
+      parentRoute: typeof HomeRouteRoute
+    }
+    '/_home/trading': {
+      id: '/_home/trading'
+      path: '/trading'
+      fullPath: '/trading'
+      preLoaderRoute: typeof HomeTradingRouteImport
+      parentRoute: typeof HomeRouteRoute
+    }
+    '/_home/education': {
+      id: '/_home/education'
+      path: '/education'
+      fullPath: '/education'
+      preLoaderRoute: typeof HomeEducationRouteImport
+      parentRoute: typeof HomeRouteRoute
+    }
+    '/_home/contact': {
+      id: '/_home/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof HomeContactRouteImport
+      parentRoute: typeof HomeRouteRoute
+    }
+    '/_home/company': {
+      id: '/_home/company'
+      path: '/company'
+      fullPath: '/company'
+      preLoaderRoute: typeof HomeCompanyRouteImport
+      parentRoute: typeof HomeRouteRoute
+    }
+    '/_home/about': {
+      id: '/_home/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof HomeAboutRouteImport
       parentRoute: typeof HomeRouteRoute
     }
     '/_dashboard/withdrawal': {
@@ -733,10 +828,20 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
 )
 
 interface HomeRouteRouteChildren {
+  HomeAboutRoute: typeof HomeAboutRoute
+  HomeCompanyRoute: typeof HomeCompanyRoute
+  HomeContactRoute: typeof HomeContactRoute
+  HomeEducationRoute: typeof HomeEducationRoute
+  HomeTradingRoute: typeof HomeTradingRoute
   HomeIndexRoute: typeof HomeIndexRoute
 }
 
 const HomeRouteRouteChildren: HomeRouteRouteChildren = {
+  HomeAboutRoute: HomeAboutRoute,
+  HomeCompanyRoute: HomeCompanyRoute,
+  HomeContactRoute: HomeContactRoute,
+  HomeEducationRoute: HomeEducationRoute,
+  HomeTradingRoute: HomeTradingRoute,
   HomeIndexRoute: HomeIndexRoute,
 }
 

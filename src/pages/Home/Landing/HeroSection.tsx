@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Flash, Graph, HomeTrendUp, ShieldSecurity } from "iconsax-reactjs";
 import { ArrowRight } from "lucide-react";
@@ -43,6 +44,8 @@ const floatingCards = [
 ];
 
 export default function HeroSection() {
+	const navigate = useNavigate();
+
 	return (
 		<section className="relative flex justify-center items-center pt-20 min-h-[80vh] md:min-h-[85vh] xl:min-h-[90vh] overflow-hidden hero-gradient">
 			{/* Grid pattern */}
@@ -84,7 +87,7 @@ export default function HeroSection() {
 					<span className="gradient-text">Grow Faster.</span>
 				</motion.h1>
 
-				{/* Subheadline */}
+				{/* Sub headline */}
 				<motion.p
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
@@ -103,6 +106,9 @@ export default function HeroSection() {
 					className="flex sm:flex-row flex-col justify-center items-center gap-4"
 				>
 					<Button
+						onClick={() =>
+							navigate({ to: "/register", search: { ref: undefined } })
+						}
 						size="lg"
 						className="group gap-2 bg-primary hover:bg-primary/90 px-8 h-12 font-semibold text-primary-foreground"
 					>
@@ -110,6 +116,7 @@ export default function HeroSection() {
 						<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
 					</Button>
 					<Button
+						onClick={() => navigate({ to: "/trading" })}
 						size="lg"
 						variant="outline"
 						className="hover:bg-muted/50 px-8 border-border/60 h-12 font-medium text-foreground"

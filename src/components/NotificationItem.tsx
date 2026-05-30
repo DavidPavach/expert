@@ -34,7 +34,11 @@ export function NotificationItem({ notification }: { notification: Nots }) {
 	return (
 		<>
 			{selectedNot && (
-				<Overlay open={!!selectedNot} onClose={() => setSelectedNot(null)}>
+				<Overlay
+					open={!!selectedNot}
+					onClose={() => setSelectedNot(null)}
+					variant="bottom"
+				>
 					<NotificationBody
 						notification={selectedNot}
 						onClose={() => setSelectedNot(null)}

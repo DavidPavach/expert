@@ -1,8 +1,11 @@
+import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function CTASection() {
+	const navigate = useNavigate();
+
 	return (
 		<section className="relative py-24 lg:py-32 overflow-hidden">
 			<div className="z-2 relative mx-auto px-4 md:px-6 xl:px-8 max-w-4xl text-center">
@@ -25,6 +28,9 @@ export default function CTASection() {
 					</p>
 					<div className="relative flex sm:flex-row flex-col justify-center items-center gap-4">
 						<Button
+							onClick={() =>
+								navigate({ to: "/register", search: { ref: undefined } })
+							}
 							size="lg"
 							className="group gap-2 bg-primary hover:bg-primary/90 px-8 h-12 font-semibold text-primary-foreground text-base"
 						>
@@ -32,9 +38,10 @@ export default function CTASection() {
 							<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
 						</Button>
 						<Button
+							onClick={() => navigate({ to: "/contact" })}
 							size="lg"
 							variant="ghost"
-							className="font-medium text-muted-foreground hover:text-foreground"
+							className="py-3 font-medium text-muted-foreground hover:text-foreground"
 						>
 							Contact Sales
 						</Button>

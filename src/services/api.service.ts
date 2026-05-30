@@ -15,6 +15,30 @@ export const authUser = async (data: AuthPayload) => {
 	return response.data;
 };
 
+// Password Reset Verification
+export const passResetVerify = async (data: { email: string }) => {
+	const response = await axiosInstance.post("users/reset", data);
+	return response.data;
+};
+
+// Verify Password Reset OTP
+export const verifyPassResetOtp = async (data: {
+	email: string;
+	otp: string;
+}) => {
+	const response = await axiosInstance.post("users/verify-reset", data);
+	return response.data;
+};
+
+// Reset Password
+export const resetPassword = async (data: {
+	email: string;
+	password: string;
+}) => {
+	const response = await axiosInstance.post("users/password-reset", data);
+	return response.data;
+};
+
 // Logout User
 export const logoutUser = async () => {
 	const response = await axiosInstance.post(`auth/logout`);
@@ -85,9 +109,10 @@ export const userTransaction = async (
 };
 
 // New Copy Trading
-export const newCopyTrading = async (id: string) => {
+export const newCopyTrading = async (id: string, amount: number) => {
 	const response = await axiosInstance.post(`copy/new`, {
 		masterTraderId: id,
+		amount,
 	});
 	return response.data;
 };

@@ -1,4 +1,6 @@
 // UIs
+
+import { Link } from "@tanstack/react-router";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
@@ -12,11 +14,13 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 				<ThemeToggle />
 			</section>
 			<section className="relative w-full max-w-lg md:max-w-xl xl:max-w-2xl">
-				<img
-					src="/logo.png"
-					alt="Expertmirrorcon Logo"
-					className="bg-background shadow mx-auto p-2 rounded-xl md:rounded-2xl size-12 md:size-14 xl:size-16"
-				/>
+				<Link to="/">
+					<img
+						src="/logo.png"
+						alt="Expertmirrorcon Logo"
+						className="bg-background shadow mx-auto p-2 rounded-xl md:rounded-2xl size-12 md:size-14 xl:size-16"
+					/>
+				</Link>
 				{children}
 			</section>
 		</main>

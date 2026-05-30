@@ -6,6 +6,8 @@ import { Overlay } from "#/components/Overlay";
 import EditTraderForm from "#/pages/Admin/Traders/EditTrader";
 import { useAdminDeleteTrader } from "#/services/mutations.service";
 import { formatCurrency } from "#/utils/format";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
 export default function ExpertCard({
 	expert,
@@ -20,7 +22,8 @@ export default function ExpertCard({
 	isLoading: boolean;
 	isCopying: boolean;
 }) {
-	const [openEdit, setOpenEdit] = useState(false);
+	const [openEdit, setOpenEdit] = useState<boolean>(false);
+	const [amount, setAmount] = useState(expert.minInvestment);
 
 	// Functions
 	const toggleEdit = () => setOpenEdit((prev) => !prev);
@@ -178,6 +181,23 @@ export default function ExpertCard({
 							{formatCurrency(expert.minInvestment)}
 						</span>
 					</div>
+					{!isAdmin && (
+						<div className="space-y-1">
+							<Label className="text-[10px] md:text-[11px] xl:text-xs">
+								Investment Amount <span className="text-destructive">*</span>
+							</Label>
+							<Input
+								placeholder="Enter Amount"
+								type="number"
+								min={expert.minInvestment}
+								required={true}
+								value={amount}
+								onChange={(e) =>
+									setAmount(parseFloat(e.target.value) || expert.minInvestment)
+								}
+							/>
+						</div>
+					)}
 					{!isAdmin &&
 						(isCopying ? (
 							<button
@@ -192,7 +212,7 @@ export default function ExpertCard({
 								disabled={isCopying || isLoading}
 								onClick={() => {
 									if (!copy) return;
-									copy(expert.minInvestment, expert._id, expert.name);
+									copy(amount, expert._id, expert.name);
 								}}
 								type="button"
 								className="flex justify-center items-center gap-2 bg-primary hover:opacity-90 shadow-lg shadow-primary/20 py-3 rounded-xl w-full font-bold text-primary-foreground transition-all cursor-pointer"
