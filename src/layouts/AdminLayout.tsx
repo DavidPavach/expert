@@ -1,14 +1,24 @@
+import { Navigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import AdminHeader from "#/components/AdminHeader";
 import { BottomNav, SideNav } from "#/components/AdminNav";
+import { isAdmin } from "#/utils/cookie";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+	useEffect(() => {
+		if (!isAdmin()) {
+			Navigate({
+				to: "/unauthorized",
+			});
+		}
+	}, []);
+
 	return (
 		<main className="flex flex-col">
 			<section className="flex">
 				<div className="hidden lg:block lg:w-[18rem]">
 					<SideNav />
 				</div>
-
 				<aside className="flex-1 min-w-0">
 					<AdminHeader />
 					<section className="mb-20 md:mb-0 p-2 md:p-4 xl:p-6 overflow-y-auto">

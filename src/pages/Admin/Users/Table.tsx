@@ -109,7 +109,7 @@ export default function UserTable({
 									<div>
 										<p className="font-semibold capitalize">{u.fullName}</p>
 										<p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm first-letter:uppercase">
-											@{u.username} · {u.email}
+											A{u.username} · {u.email}
 										</p>
 									</div>
 								</div>

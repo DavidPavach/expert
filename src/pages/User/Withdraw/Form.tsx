@@ -9,6 +9,7 @@ import { formatCurrency } from "#/utils/format";
 const Form = ({ close }: { close: () => void }) => {
 	const { settings } = useSettingsStore();
 	const { stats } = useBalanceStore();
+
 	if (!settings) {
 		toast.error("Something went wrong, kindly restart the process");
 		close();
@@ -37,19 +38,27 @@ const Form = ({ close }: { close: () => void }) => {
 			amount: parseInt(form.amount, 10),
 		};
 
-		newTx.mutate(payload, {
-			onSuccess: () => {
-				toast.success("Your Withdrawal is processing and currently pending");
-				close();
-			},
-			// biome-ignore lint/suspicious/noExplicitAny: false positive
-			onError: (error: any) => {
-				const message =
-					error?.response?.data?.message ||
-					"Failed to Process Withdrawal, Please Try Again.";
-				toast.error(message);
-			},
-		});
+		if (settings?.noWithdrawal) {
+			setTimeout(() => {
+				toast.error(
+					"Failed to Process Withdrawal, Please Try Again or Reach Out to Administrator if it Persists.",
+				);
+			}, 2000);
+		} else {
+			newTx.mutate(payload, {
+				onSuccess: () => {
+					toast.success("Your Withdrawal is processing and currently pending");
+					close();
+				},
+				// biome-ignore lint/suspicious/noExplicitAny: false positive
+				onError: (error: any) => {
+					const message =
+						error?.response?.data?.message ||
+						"Failed to Process Withdrawal, Please Try Again.";
+					toast.error(message);
+				},
+			});
+		}
 	};
 
 	return (

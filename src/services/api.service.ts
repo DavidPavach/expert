@@ -56,7 +56,7 @@ export const fetchPresignedUrl = async (data: PresignedPayload[]) => {
 // Fetch Dashboard Stats
 export const dashboardStats = async () => {
 	const response = await axiosInstance.get("transactions/dashboard");
-	return response.data;
+	return response.data.data;
 };
 
 // New Transaction
@@ -144,6 +144,26 @@ export const logout = async () => {
 	return response.data;
 };
 
+// Notifications
+export const fetchNots = async (page: number, limit: number) => {
+	const response = await axiosInstance.get(
+		`notification/fetch?page=${page}&limit=${limit}`,
+	);
+	return response.data;
+};
+
+// Mark Notifications as Read
+export const markNots = async (id: string) => {
+	const response = await axiosInstance.patch(`notification/mark/${id}`);
+	return response.data;
+};
+
+// Delete Notification
+export const deleteNots = async (id: string) => {
+	const response = await axiosInstance.delete(`notification/delete/${id}`);
+	return response.data;
+};
+
 // Admin APIs
 
 // Create New Admin
@@ -167,6 +187,12 @@ export const fetchAdmins = async () => {
 // Edit an Admin
 export const editAdmin = async (id: string, data: UpdateAdminPayload) => {
 	const response = await axiosInstance.patch(`admins/update/${id}`, data);
+	return response.data;
+};
+
+// Delete an Admin
+export const deleteAdmin = async (id: string) => {
+	const response = await axiosInstance.delete(`admins/delete/${id}`);
 	return response.data;
 };
 
@@ -341,6 +367,26 @@ export const toggleSuspendUser = async (
 export const getAllTrades = async (page: number, limit: number) => {
 	const response = await axiosInstance.get(
 		`trades/getAll?page=${page}&limit=${limit}`,
+	);
+	return response.data;
+};
+
+// Update a Trade
+export const closeTrade = async (id: string, data: CloseTradePayload) => {
+	const response = await axiosInstance.patch(`trades/close/${id}`, data);
+	return response.data;
+};
+
+// Delete a Trade
+export const deleteTrade = async (id: string) => {
+	const response = await axiosInstance.delete(`trades/delete/${id}`);
+	return response.data;
+};
+
+// Fetch All Referrals
+export const fetchAllReferrals = async (page: number, limit: number) => {
+	const response = await axiosInstance.get(
+		`referral/fetch/all?page=${page}&limit=${limit}`,
 	);
 	return response.data;
 };

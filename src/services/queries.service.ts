@@ -6,8 +6,10 @@ import {
 	dashboardStats,
 	fetchAdmins,
 	fetchAllCopyTrading,
+	fetchAllReferrals,
 	fetchKyc,
 	fetchKycs,
+	fetchNots,
 	fetchPrices,
 	fetchReferrals,
 	fetchSettings,
@@ -25,7 +27,7 @@ import {
 export function useCurrentUser() {
 	return useQuery({
 		queryKey: ["me"],
-		queryFn: () => currentUser(),
+		queryFn: currentUser,
 	});
 }
 
@@ -33,7 +35,7 @@ export function useCurrentUser() {
 export function useFetchPrices() {
 	return useQuery({
 		queryKey: ["prices"],
-		queryFn: () => fetchPrices(),
+		queryFn: fetchPrices,
 	});
 }
 
@@ -41,7 +43,7 @@ export function useFetchPrices() {
 export function useSettings() {
 	return useQuery({
 		queryKey: ["settings"],
-		queryFn: () => fetchSettings(),
+		queryFn: fetchSettings,
 	});
 }
 
@@ -49,7 +51,7 @@ export function useSettings() {
 export function useDashboard() {
 	return useQuery({
 		queryKey: ["dashboard"],
-		queryFn: () => dashboardStats(),
+		queryFn: dashboardStats,
 	});
 }
 
@@ -57,7 +59,7 @@ export function useDashboard() {
 export function useUserCopyTrading() {
 	return useQuery({
 		queryKey: ["copyTrading"],
-		queryFn: () => fetchUserCopyTrading(),
+		queryFn: fetchUserCopyTrading,
 	});
 }
 
@@ -73,7 +75,7 @@ export function useReferrals(page: number, limit: number) {
 export function useKyc() {
 	return useQuery({
 		queryKey: ["kyc"],
-		queryFn: () => fetchKyc(),
+		queryFn: fetchKyc,
 	});
 }
 
@@ -95,6 +97,14 @@ export function useTransactions(
 	return useQuery({
 		queryKey: ["transactions", page, limit, type, others],
 		queryFn: () => userTransaction(page, limit, type, others),
+	});
+}
+
+// Fetch Notifications
+export function useNots(page: number, limit: number) {
+	return useQuery({
+		queryKey: ["notifications"],
+		queryFn: () => fetchNots(page, limit),
 	});
 }
 
@@ -161,14 +171,22 @@ export const useFetchTrades = (page: number, limit: number) => {
 export const useFetchAdmin = () => {
 	return useQuery({
 		queryKey: ["allAdmins"],
-		queryFn: () => fetchAdmins(),
+		queryFn: fetchAdmins,
 	});
 };
 
 // Fetch Current Admin
 export const useCurrentAdmin = () => {
 	return useQuery({
-		queryKey: ["currentAdmin"],
-		queryFn: () => currentAdmin(),
+		queryKey: ["myAdmin"],
+		queryFn: currentAdmin,
+	});
+};
+
+// Fetch All Referrals
+export const useFetchReferrals = (page: number, limit: number) => {
+	return useQuery({
+		queryKey: ["allReferrals", page, limit],
+		queryFn: () => fetchAllReferrals(page, limit),
 	});
 };

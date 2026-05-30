@@ -48,7 +48,6 @@ export const useMeStore = create<UserState>((set, get) => ({
 			// Try query cache first
 			if (queryClient && !force) {
 				const cached = queryClient.getQueryData<Me>(["me"]);
-
 				if (cached) {
 					set({ user: cached, loading: false });
 					return cached;
@@ -63,6 +62,7 @@ export const useMeStore = create<UserState>((set, get) => ({
 			}
 
 			const userData = res.data;
+
 			set({ user: userData, loading: false });
 
 			// Sync query cache too

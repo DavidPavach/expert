@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 
-// Icons
 import {
 	ArrowDown2,
 	Logout,
@@ -10,11 +9,18 @@ import {
 	ReceiptText,
 } from "iconsax-reactjs";
 import { useEffect, useRef, useState } from "react";
+import { useNots } from "#/services/queries.service";
 import { useBalanceStore } from "#/stores/dashboard.store";
-// Stores
+
 import { useMeStore } from "#/stores/me.store";
 import { formatCurrency } from "#/utils/format";
-// Components
+import {
+	NotificationEmpty,
+	NotificationItem,
+	NotificationSkeleton,
+} from "./NotificationItem";
+import Pagination from "./Pagination";
+
 import { ThemeToggle } from "./ThemeToggle";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
@@ -23,6 +29,25 @@ export default function Header() {
 	const { user } = useMeStore();
 	const { stats } = useBalanceStore();
 	const [open, setOpen] = useState(false);
+	const [notificationOpen, setNotificationOpen] = useState(false);
+
+	const [page, setPage] = useState(1);
+
+	const { data: notificationData, isLoading: notificationsLoading } = useNots(
+		page,
+		20,
+	);
+
+	const notifications = notificationData?.data?.data ?? [];
+
+	const notificationPagination = notificationData?.data?.pagination ?? {
+		page: 1,
+		totalPages: 1,
+	};
+
+	const unreadCount = notifications.filter((n: Nots) => !n.isRead).length;
+
+	const notificationRef = useRef<HTMLDivElement | null>(null);
 
 	const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -34,7 +59,15 @@ export default function Header() {
 			) {
 				setOpen(false);
 			}
+
+			if (
+				notificationRef.current &&
+				!notificationRef.current.contains(event.target as Node)
+			) {
+				setNotificationOpen(false);
+			}
 		};
+
 		document.addEventListener("mousedown", handleOutsideClick);
 		return () => {
 			document.removeEventListener("mousedown", handleOutsideClick);
@@ -63,7 +96,7 @@ export default function Header() {
 							Account Balance
 						</p>
 
-						<h2 className="font-bold text-primary-foreground text-lg montserrat">
+						<h2 className="font-bold text-primary-foreground text-lg md:text-xl xl:text-2xl montserrat">
 							{formatCurrency(stats?.availableBalance || 0)}
 						</h2>
 					</section>
@@ -72,14 +105,60 @@ export default function Header() {
 				{/* Right */}
 				<section className="flex items-center gap-x-3 md:gap-x-4">
 					{/* Notification */}
-					<button
-						type="button"
-						className="relative flex justify-center items-center hover:bg-accent/30 border border-border rounded-xl size-10 transition-all duration-300 cursor-pointer"
-					>
-						<NotificationBing className="size-5" variant="Outline" />
+					<div ref={notificationRef} className="relative">
+						<div className="flex items-center gap-x-2">
+							<button
+								type="button"
+								onClick={() => setNotificationOpen((prev) => !prev)}
+								className="relative flex justify-center items-center hover:bg-accent/30 border border-border rounded-lg size-8 md:size-9 xl:size-10 transition-all cursor-pointer"
+							>
+								<NotificationBing
+									className="size-4 md:size-4.5 xl:size-5"
+									variant="Outline"
+								/>
 
-						<span className="-top-1 -right-1 absolute bg-destructive border-2 border-background rounded-full size-3" />
-					</button>
+								{unreadCount > 0 && (
+									<div className="-top-1 -right-1 absolute flex justify-center items-center bg-destructive rounded-full size-5 font-bold text-[10px] text-white">
+										{unreadCount > 9 ? "9+" : unreadCount}
+									</div>
+								)}
+							</button>
+							<div>
+								<div>
+									<h3 className="font-bold">Notifications</h3>
+									<p className="-mt-0.5 text-[10px] text-muted-foreground md:text-[11px] xl:text-xs truncate">
+										{unreadCount} unread notifications
+									</p>
+								</div>
+							</div>
+						</div>
+						{notificationOpen && (
+							<div className="top-full left-0 absolute bg-card mt-2 rounded-md w-80 md:w-96 max-h-112.5 overflow-y-auto translate-x-[-10%] hide-scrollbar">
+								{notificationsLoading ? (
+									<NotificationSkeleton />
+								) : notifications.length === 0 ? (
+									<NotificationEmpty />
+								) : (
+									notifications.map((notification: Nots) => (
+										<NotificationItem
+											key={notification._id}
+											notification={notification}
+										/>
+									))
+								)}
+							</div>
+						)}
+						{notificationPagination.totalPages > 1 && (
+							<div className="p-3 border-border border-t">
+								<Pagination
+									page={page}
+									defaultPage={page}
+									pageSize={notificationPagination.totalPages}
+									onPageChange={setPage}
+								/>
+							</div>
+						)}
+					</div>
 
 					{/* Theme */}
 					<ThemeToggle />
@@ -123,7 +202,7 @@ export default function Header() {
 														}`}
 						>
 							{/* Top */}
-							<div className="flex items-center gap-x-4 bg-accent/20 p-4 border-border border-b">
+							<div className="flex items-center gap-x-4 bg-accent/20 p-2 border-border border-b">
 								<Avatar className="border border-border size-10 md:size-12 xl:size-14">
 									<AvatarImage src={user?.profilePicture} />
 									<AvatarFallback className="bg-primary font-bold text-primary-foreground text-lg">

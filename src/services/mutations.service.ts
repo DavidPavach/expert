@@ -8,15 +8,20 @@ import {
 	adminNewTx,
 	authAdmin,
 	authUser,
+	closeTrade,
 	createUser,
+	deleteAdmin,
 	deleteCopyTradingEntry,
 	deleteDepositCoin,
 	deleteKyc,
+	deleteNots,
+	deleteTrade,
 	deleteTrader,
 	deleteTx,
 	deleteWithdrawalCoin,
 	editAdmin,
 	editTx,
+	markNots,
 	newAdmin,
 	newCopyTrading,
 	newKyc,
@@ -58,7 +63,8 @@ export function useAuth() {
 		},
 		onSuccess: async () => {
 			queryClient.invalidateQueries();
-			useMeStore.getState().ensureUser(queryClient);
+			useMeStore.getState().ensureUser(queryClient, true);
+			useBalanceStore.getState().ensureStats(queryClient, true);
 			useSettingsStore.getState().ensureSettings(queryClient);
 		},
 	});
@@ -163,6 +169,36 @@ export function useNewTrade() {
 	});
 }
 
+// Mark Notification as Read
+export function useMarkNots() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (id: string) => markNots(id),
+		onError: (error) => {
+			console.error("Failed to mark notification as read:", error);
+		},
+		onSuccess: async () => {
+			queryClient.invalidateQueries({ queryKey: ["notifications"] });
+		},
+	});
+}
+
+// Delete Notification
+export function useDeleteNots() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (id: string) => deleteNots(id),
+		onError: (error) => {
+			console.error("Failed to delete notification:", error);
+		},
+		onSuccess: async () => {
+			queryClient.invalidateQueries({ queryKey: ["notifications"] });
+		},
+	});
+}
+
 // Admin
 
 // Auth Admin
@@ -203,6 +239,21 @@ export function useAdminUpdate() {
 		mutationFn: (vars: EditAdminVariables) => editAdmin(vars.id, vars.data),
 		onError: (error) => {
 			console.error("Admin Editing failed:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["allAdmins"] });
+		},
+	});
+}
+
+// Delete Admin
+export function useAdminDelete() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (id: string) => deleteAdmin(id),
+		onError: (error) => {
+			console.error("Admin Deletion failed:", error);
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["allAdmins"] });
@@ -512,6 +563,43 @@ export function useAdminSuspendUser() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["users"],
+			});
+		},
+	});
+}
+
+// Close Trade
+type CloseTradeVariables = { id: string; data: CloseTradePayload };
+export function useAdminCloseTrade() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (vars: CloseTradeVariables) => {
+			return closeTrade(vars.id, vars.data);
+		},
+		onError: (error) => {
+			console.error("Failed to close trade:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["allTrades"],
+			});
+		},
+	});
+}
+
+// Delete Trade
+export function useAdminDeleteTrade() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (id: string) => {
+			return deleteTrade(id);
+		},
+		onError: (error) => {
+			console.error("Failed to delete trade:", error);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["allTrades"],
 			});
 		},
 	});

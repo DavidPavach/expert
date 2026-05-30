@@ -26,6 +26,7 @@ import { Route as DashboardHistoryRouteImport } from './routes/_dashboard/histor
 import { Route as DashboardDepositRouteImport } from './routes/_dashboard/deposit'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard/dashboard'
 import { Route as DashboardCopyRouteImport } from './routes/_dashboard/copy'
+import { Route as AuthUnauthorizedRouteImport } from './routes/_auth/unauthorized'
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthOperationsRouteImport } from './routes/_auth/operations'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
@@ -37,8 +38,8 @@ import { Route as AdminTransactionsRouteImport } from './routes/_admin/transacti
 import { Route as AdminTradesRouteImport } from './routes/_admin/trades'
 import { Route as AdminTradersRouteImport } from './routes/_admin/traders'
 import { Route as AdminStaffRouteImport } from './routes/_admin/staff'
+import { Route as AdminSignoutRouteImport } from './routes/_admin/signout'
 import { Route as AdminSettingsRouteImport } from './routes/_admin/settings'
-import { Route as AdminNotifyRouteImport } from './routes/_admin/notify'
 import { Route as AdminMeRouteImport } from './routes/_admin/me'
 import { Route as AdminCopyTradingRouteImport } from './routes/_admin/copy-trading'
 
@@ -123,6 +124,11 @@ const DashboardCopyRoute = DashboardCopyRouteImport.update({
   path: '/copy',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const AuthUnauthorizedRoute = AuthUnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -178,14 +184,14 @@ const AdminStaffRoute = AdminStaffRouteImport.update({
   path: '/staff',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminSignoutRoute = AdminSignoutRouteImport.update({
+  id: '/signout',
+  path: '/signout',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminNotifyRoute = AdminNotifyRouteImport.update({
-  id: '/notify',
-  path: '/notify',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminMeRoute = AdminMeRouteImport.update({
@@ -203,8 +209,8 @@ export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
   '/copy-trading': typeof AdminCopyTradingRoute
   '/me': typeof AdminMeRoute
-  '/notify': typeof AdminNotifyRoute
   '/settings': typeof AdminSettingsRoute
+  '/signout': typeof AdminSignoutRoute
   '/staff': typeof AdminStaffRoute
   '/traders': typeof AdminTradersRoute
   '/trades': typeof AdminTradesRoute
@@ -216,6 +222,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/operations': typeof AuthOperationsRoute
   '/register': typeof AuthRegisterRoute
+  '/unauthorized': typeof AuthUnauthorizedRoute
   '/copy': typeof DashboardCopyRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/deposit': typeof DashboardDepositRoute
@@ -233,8 +240,8 @@ export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
   '/copy-trading': typeof AdminCopyTradingRoute
   '/me': typeof AdminMeRoute
-  '/notify': typeof AdminNotifyRoute
   '/settings': typeof AdminSettingsRoute
+  '/signout': typeof AdminSignoutRoute
   '/staff': typeof AdminStaffRoute
   '/traders': typeof AdminTradersRoute
   '/trades': typeof AdminTradesRoute
@@ -246,6 +253,7 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/operations': typeof AuthOperationsRoute
   '/register': typeof AuthRegisterRoute
+  '/unauthorized': typeof AuthUnauthorizedRoute
   '/copy': typeof DashboardCopyRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/deposit': typeof DashboardDepositRoute
@@ -267,8 +275,8 @@ export interface FileRoutesById {
   '/_home': typeof HomeRouteRouteWithChildren
   '/_admin/copy-trading': typeof AdminCopyTradingRoute
   '/_admin/me': typeof AdminMeRoute
-  '/_admin/notify': typeof AdminNotifyRoute
   '/_admin/settings': typeof AdminSettingsRoute
+  '/_admin/signout': typeof AdminSignoutRoute
   '/_admin/staff': typeof AdminStaffRoute
   '/_admin/traders': typeof AdminTradersRoute
   '/_admin/trades': typeof AdminTradesRoute
@@ -280,6 +288,7 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/operations': typeof AuthOperationsRoute
   '/_auth/register': typeof AuthRegisterRoute
+  '/_auth/unauthorized': typeof AuthUnauthorizedRoute
   '/_dashboard/copy': typeof DashboardCopyRoute
   '/_dashboard/dashboard': typeof DashboardDashboardRoute
   '/_dashboard/deposit': typeof DashboardDepositRoute
@@ -300,8 +309,8 @@ export interface FileRouteTypes {
     | '/'
     | '/copy-trading'
     | '/me'
-    | '/notify'
     | '/settings'
+    | '/signout'
     | '/staff'
     | '/traders'
     | '/trades'
@@ -313,6 +322,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/operations'
     | '/register'
+    | '/unauthorized'
     | '/copy'
     | '/dashboard'
     | '/deposit'
@@ -330,8 +340,8 @@ export interface FileRouteTypes {
     | '/'
     | '/copy-trading'
     | '/me'
-    | '/notify'
     | '/settings'
+    | '/signout'
     | '/staff'
     | '/traders'
     | '/trades'
@@ -343,6 +353,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/operations'
     | '/register'
+    | '/unauthorized'
     | '/copy'
     | '/dashboard'
     | '/deposit'
@@ -363,8 +374,8 @@ export interface FileRouteTypes {
     | '/_home'
     | '/_admin/copy-trading'
     | '/_admin/me'
-    | '/_admin/notify'
     | '/_admin/settings'
+    | '/_admin/signout'
     | '/_admin/staff'
     | '/_admin/traders'
     | '/_admin/trades'
@@ -376,6 +387,7 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_auth/operations'
     | '/_auth/register'
+    | '/_auth/unauthorized'
     | '/_dashboard/copy'
     | '/_dashboard/dashboard'
     | '/_dashboard/deposit'
@@ -519,6 +531,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCopyRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/_auth/unauthorized': {
+      id: '/_auth/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof AuthUnauthorizedRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/register': {
       id: '/_auth/register'
       path: '/register'
@@ -596,18 +615,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStaffRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_admin/signout': {
+      id: '/_admin/signout'
+      path: '/signout'
+      fullPath: '/signout'
+      preLoaderRoute: typeof AdminSignoutRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/_admin/settings': {
       id: '/_admin/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/_admin/notify': {
-      id: '/_admin/notify'
-      path: '/notify'
-      fullPath: '/notify'
-      preLoaderRoute: typeof AdminNotifyRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/_admin/me': {
@@ -630,8 +649,8 @@ declare module '@tanstack/react-router' {
 interface AdminRouteRouteChildren {
   AdminCopyTradingRoute: typeof AdminCopyTradingRoute
   AdminMeRoute: typeof AdminMeRoute
-  AdminNotifyRoute: typeof AdminNotifyRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSignoutRoute: typeof AdminSignoutRoute
   AdminStaffRoute: typeof AdminStaffRoute
   AdminTradersRoute: typeof AdminTradersRoute
   AdminTradesRoute: typeof AdminTradesRoute
@@ -644,8 +663,8 @@ interface AdminRouteRouteChildren {
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminCopyTradingRoute: AdminCopyTradingRoute,
   AdminMeRoute: AdminMeRoute,
-  AdminNotifyRoute: AdminNotifyRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminSignoutRoute: AdminSignoutRoute,
   AdminStaffRoute: AdminStaffRoute,
   AdminTradersRoute: AdminTradersRoute,
   AdminTradesRoute: AdminTradesRoute,
@@ -664,6 +683,7 @@ interface AuthRouteRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthOperationsRoute: typeof AuthOperationsRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
+  AuthUnauthorizedRoute: typeof AuthUnauthorizedRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
@@ -671,6 +691,7 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthOperationsRoute: AuthOperationsRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  AuthUnauthorizedRoute: AuthUnauthorizedRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(

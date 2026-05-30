@@ -6,6 +6,7 @@ import { toast } from "react-fox-toast";
 import FormField, { InputBase } from "#/components/FormField";
 import { cn } from "#/lib/utils";
 import { useAuthAdmin } from "#/services/mutations.service";
+import { adminCookie, setCookie } from "#/utils/cookie";
 
 const index = () => {
 	const [showPw, setShowPw] = useState<boolean>(false);
@@ -30,6 +31,7 @@ const index = () => {
 				toast.success("Authentication Successful", {
 					icon: "🚀",
 				});
+				setCookie("expert", adminCookie, formData.rememberMe ? 7 : 1);
 				navigate({ to: "/transactions" });
 			},
 			// biome-ignore lint/suspicious/noExplicitAny: false positive

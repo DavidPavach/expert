@@ -6,6 +6,7 @@ import { toast } from "react-fox-toast";
 import { UAParser } from "ua-parser-js";
 import { loginSchema } from "#/schemas/auth.schema";
 import { useAuth } from "#/services/mutations.service";
+import { setCookie, userCookie } from "#/utils/cookie";
 import Footer from "./Footer";
 import Form from "./Form";
 import Header from "./Header";
@@ -87,6 +88,7 @@ const index = () => {
 				toast.success("Authentication Successful", {
 					icon: "🚀",
 				});
+				setCookie("expert", userCookie, formData.rememberMe ? 7 : 1);
 				navigate({ to: "/dashboard" });
 			},
 			// biome-ignore lint/suspicious/noExplicitAny: false positive

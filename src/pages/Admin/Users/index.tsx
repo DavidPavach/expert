@@ -68,10 +68,10 @@ const index = () => {
 			{/* Header */}
 			<header className="flex sm:flex-row flex-col justify-between sm:items-center gap-4 mb-8">
 				<div>
-					<h1 className="mb-1 font-bold text-foreground text-2xl md:text-3xl">
+					<h1 className="mb-1 font-bold text-foreground text-xl md:text-2xl xl:text-3xl">
 						User Management
 					</h1>
-					<p className="text-muted-foreground text-xs md:text-sm">
+					<p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm">
 						Manage platform users, KYC status, and account access
 					</p>
 				</div>

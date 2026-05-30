@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Market from "@/pages/User/Market";
+import Logout from "@/pages/User/Logout";
 import { APP_NAME } from "../__root";
 
-export const Route = createFileRoute("/_dashboard/market")({
+export const Route = createFileRoute("/_admin/signout")({
 	head: () => ({
 		meta: [
 			{
-				title: `Live Market | ${APP_NAME}`,
+				title: `Settings | ${APP_NAME}`,
 			},
 		],
 	}),
@@ -14,5 +14,5 @@ export const Route = createFileRoute("/_dashboard/market")({
 });
 
 function RouteComponent() {
-	return <Market />;
+	return <Logout />;
 }

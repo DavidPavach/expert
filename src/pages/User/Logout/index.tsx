@@ -1,13 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft2, LogoutCurve } from "iconsax-reactjs";
 import { logout } from "#/services/api.service";
+import { isUser, removeCookie } from "#/utils/cookie";
 import { Button } from "@/components/ui/button";
 
 export default function LogoutPage() {
 	const handleLogout = async () => {
 		try {
 			await logout();
-			window.location.href = "/login";
+			removeCookie("expert");
+			window.location.href = isUser() ? "/login" : "/operations";
 		} catch (error) {
 			console.error("Logout failed:", error);
 		}
@@ -40,7 +42,7 @@ export default function LogoutPage() {
 						variant="outline"
 						className="flex-1 rounded-2xl h-12 font-medium text-[11px] md:text-xs xl:text-sm"
 					>
-						<Link to="/dashboard">
+						<Link to={isUser() ? "/dashboard" : "/transactions"}>
 							<ArrowLeft2 className="size-4 md:size-4.5 xl:size-5" />
 							Go Home
 						</Link>

@@ -55,7 +55,6 @@ export const useBalanceStore = create<BalanceState>((set, get) => ({
 						stats: cached,
 						loading: false,
 					});
-
 					return cached;
 				}
 			}

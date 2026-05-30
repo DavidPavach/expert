@@ -359,6 +359,15 @@ declare type Referral = {
 	};
 };
 
+declare type AdminReferral = {
+	_id: string;
+	referrerId: User;
+	referredUserId: User;
+	rewardAmount: number;
+	createdAt: string;
+	updatedAt: string;
+};
+
 // New Trade Payload
 declare type NewTradePayload = {
 	asset: string;
@@ -383,7 +392,28 @@ declare type Trade = {
 	expiration: string;
 	createdAt: string;
 	updatedAt: string;
-	__v?: number;
+};
+
+// Admin Trade
+declare type AdminTrade = {
+	_id: string;
+	user: User;
+	amount: number;
+	asset: string;
+	entryPrice: number;
+	leverage: string;
+	profit: number;
+	status: "OPEN" | "WON" | "LOST" | "CLOSED" | "CANCELLED";
+	tradeType: "BUY" | "SELL";
+	expiration: string;
+	createdAt: string;
+	updatedAt: string;
+};
+
+declare type CloseTradePayload = {
+	closePrice: number;
+	profit: number;
+	status: string;
 };
 
 // Admin
@@ -401,4 +431,23 @@ declare type UpdateAdminPayload = {
 	email?: string;
 	password?: string;
 	role?: string;
+};
+
+declare type Nots = {
+	_id: string;
+	user: string;
+	title: string;
+	message: string;
+	type: "INFO" | "SUCCESS" | "WARNING" | "ERROR";
+	trigger:
+		| "SYSTEM"
+		| "TRANSACTION"
+		| "TRADE"
+		| "COPY_TRADING"
+		| "REFERRAL"
+		| "KYC"
+		| "OTHER";
+	isRead: boolean;
+	createdAt: string;
+	updatedAt: string;
 };

@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Market from "@/pages/User/Market";
+import UnauthorizedPage from "#/pages/Auth/Unauthorized";
 import { APP_NAME } from "../__root";
 
-export const Route = createFileRoute("/_dashboard/market")({
+export const Route = createFileRoute("/_auth/unauthorized")({
 	head: () => ({
 		meta: [
 			{
-				title: `Live Market | ${APP_NAME}`,
+				title: `Register | ${APP_NAME}`,
 			},
 		],
 	}),
@@ -14,5 +14,5 @@ export const Route = createFileRoute("/_dashboard/market")({
 });
 
 function RouteComponent() {
-	return <Market />;
+	return <UnauthorizedPage />;
 }

@@ -15,11 +15,11 @@ export const ThemeToggle = () => {
 			title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
 		>
 			<Sun
-				className="absolute size-5 rotate-0 dark:-rotate-90 scale-100 dark:scale-0 group-hover:scale-110 transition-all duration-300"
+				className="absolute size-4 md:size-4.5 xl:size-5 rotate-0 dark:-rotate-90 scale-100 dark:scale-0 group-hover:scale-110 transition-all duration-300"
 				strokeWidth={1.5}
 			/>
 			<Moon
-				className="absolute size-5 rotate-90 dark:rotate-0 scale-0 dark:scale-100 group-hover:scale-110 transition-all duration-300"
+				className="absolute size-4 md:size-4.5 xl:size-5 rotate-90 dark:rotate-0 scale-0 dark:scale-100 group-hover:scale-110 transition-all duration-300"
 				strokeWidth={1.5}
 			/>
 		</button>

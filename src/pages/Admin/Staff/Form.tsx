@@ -24,6 +24,9 @@ const index = () => {
 
 	const newAdmin = useNewAdmin();
 	const handleSubmit = () => {
+		if (!formData.email.trim() || !formData.password.trim()) {
+			return toast.error("Please fill in all required fields");
+		}
 		newAdmin.mutate(formData, {
 			onSuccess: () => {
 				toast.success("Admin Created Successfully", {

@@ -186,7 +186,6 @@ export default function EditModal({
 			...(form.status !== record.status ? { status: form.status } : {}),
 			...(newEntries.length > 0 ? { entries: newEntries } : {}),
 		};
-		console.log("This is the payload", payload);
 		update.mutate(
 			{ id: record._id, data: payload },
 			{

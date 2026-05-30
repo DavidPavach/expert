@@ -62,8 +62,9 @@ const StatCard = ({
 
 export default function Summary() {
 	const { data, isLoading, isError } = useDashboard();
+
 	const { stats } = useBalanceStore();
-	const userBalances: DashboardStats = data?.data || {
+	const userBalances: DashboardStats = data || {
 		approvedDeposits: stats?.approvedDeposits,
 		approvedBonuses: stats?.approvedBonuses,
 		totalWithdrawals: stats?.totalWithdrawals,

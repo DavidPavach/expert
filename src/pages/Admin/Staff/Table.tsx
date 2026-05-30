@@ -1,4 +1,8 @@
-import { Edit, TagUser } from "iconsax-reactjs";
+import { Edit, TagUser, Trash } from "iconsax-reactjs";
+import { Loader } from "lucide-react";
+import { toast } from "react-fox-toast";
+import { useAdminDelete } from "#/services/mutations.service";
+import { useCurrentAdmin } from "#/services/queries.service";
 import { formatDate } from "#/utils/format";
 
 const ROLE_STYLES = {
@@ -19,9 +23,32 @@ const Table = ({
 	loading: boolean;
 	isSuperAdmin: boolean;
 }) => {
+	const { data: currentAdminData } = useCurrentAdmin();
+
+	const deleteAdmin = useAdminDelete();
+	const handleDelete = (id: string, email: string) => {
+		if (currentAdminData?.data?.email === email)
+			return toast.error("You cannot delete yourself");
+
+		const proceed = confirm("Do you wish to delete this admin?");
+		if (!proceed) return toast.error("Deletion was cancelled");
+
+		deleteAdmin.mutate(id, {
+			onSuccess: () => {
+				toast.success("Admin Was Deleted Successfully");
+			},
+			// biome-ignore lint/suspicious/noExplicitAny: false positive
+			onError: (error: any) => {
+				const message =
+					error?.response?.data?.message ||
+					"Failed to delete admin, Please Try Again.";
+				toast.error(message);
+			},
+		});
+	};
 	return (
 		<div className="bg-card/80 shadow-2xl backdrop-blur-md border border-border rounded-2xl overflow-hidden">
-			<div className="bg-linear-to-r from-primary/10 via-transparent to-accent/10 px-5 md:px-7 py-5 border-border border-b">
+			<div className="bg-linear-to-r from-primary/10 via-transparent to-accent/10 px-4 md:px-5 xl:px-6 py-5 border-border border-b">
 				<h2 className="font-bold">Administrators</h2>
 				<p className="text-[10px] text-muted-foreground md:text-[11px] xl:text-xs">
 					{filtered.length} of {length} admins
@@ -59,7 +86,7 @@ const Table = ({
 								].map((h) => (
 									<th
 										key={h}
-										className="px-4 md:px-5 py-3 font-semibold text-[11px] text-muted-foreground md:text-xs xl:text-sm text-left whitespace-nowrap"
+										className="px-4 md:px-5 py-3 font-semibold text-muted-foreground text-left whitespace-nowrap"
 									>
 										{h}
 									</th>
@@ -100,14 +127,28 @@ const Table = ({
 									</td>
 									{/* Actions — super admin only */}
 									{isSuperAdmin && (
-										<td className="px-4 md:px-5 py-4 whitespace-nowrap">
+										<td className="flex gap-x-5 px-4 md:px-5 py-4 whitespace-nowrap">
 											<button
 												type="button"
 												onClick={() => setEditing(a)}
 												className="flex items-center gap-1.5 bg-primary/10 hover:bg-primary/20 px-3 py-1.5 border border-primary/30 rounded-lg font-medium text-[11px] text-primary md:text-xs xl:text-sm transition-colors cursor-pointer"
 											>
-												<Edit className="size-3 md:size-3.5 xl:size4" />
+												<Edit className="size-3 md:size-3.5 xl:size-4" />
 												Edit
+											</button>
+											<button
+												type="button"
+												onClick={() => handleDelete(a._id, a.email)}
+												className="flex items-center gap-1.5 bg-destructive/10 hover:bg-destructive/20 px-3 py-1.5 border border-destructive/30 rounded-lg font-medium text-[11px] text-destructive md:text-xs xl:text-sm transition-colors cursor-pointer"
+											>
+												{deleteAdmin.isPending ? (
+													<Loader className="size-3 md:size-3.5 xl:size-4 animate-spin" />
+												) : (
+													<>
+														<Trash className="size-3 md:size-3.5 xl:size-4" />
+														Delete
+													</>
+												)}
 											</button>
 										</td>
 									)}

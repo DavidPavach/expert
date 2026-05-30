@@ -2,16 +2,16 @@ import { useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	Category,
-	Notification1,
 	Profile2User,
 	SecurityCard,
 	SecurityUser,
 	TagUser,
 } from "iconsax-reactjs";
+
 // Icons
 import { ChevronDown, LogOut, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { toast } from "react-fox-toast";
+
 // Components
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -55,8 +55,7 @@ const AdminHeader = () => {
 	};
 
 	const handleLogOut = () => {
-		toast.info("Logging you out...");
-		setTimeout(() => navigate({ to: "/operations" }), 1000);
+		navigate({ to: "/signout" });
 	};
 
 	const handleMenuClick = (action: string) => {
@@ -69,9 +68,6 @@ const AdminHeader = () => {
 				break;
 			case "staff":
 				navigate({ to: "/staff" });
-				break;
-			case "notifications":
-				navigate({ to: "/notify" });
 				break;
 			case "adminProfile":
 				navigate({ to: "/me" });
@@ -96,12 +92,6 @@ const AdminHeader = () => {
 			label: "Manage Admins",
 			icon: <SecurityUser size={18} variant="Bold" />,
 			action: () => handleMenuClick("staff"),
-		},
-		{
-			id: "notifications",
-			label: "Send Notifications",
-			icon: <Notification1 size={18} variant="Bold" />,
-			action: () => handleMenuClick("notifications"),
 		},
 		{
 			id: "adminProfile",

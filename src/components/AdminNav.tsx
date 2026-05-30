@@ -7,8 +7,6 @@ import {
 	Home3,
 	type Icon,
 	Logout,
-	Notification1,
-	NotificationBing,
 	Personalcard,
 	Profile2User,
 	SecurityUser,
@@ -71,12 +69,6 @@ const NAV_SECTIONS: NavSection[] = [
 			{ href: "/staff", icon: SecurityUser, label: "Staff" },
 		],
 	},
-	{
-		id: "others",
-		title: "Notification",
-		icon: NotificationBing,
-		links: [{ href: "/notify", icon: Notification1, label: "Notifications" }],
-	},
 ];
 
 const BOTTOM_NAVLINKS = [
@@ -138,7 +130,7 @@ export const SideNav = () => {
 			</div>
 			<div className="mt-auto pr-4 text-xs">
 				<Link
-					to="/logout"
+					to="/signout"
 					activeProps={{
 						className: "bg-primary/70 font-semibold rounded-4xl",
 					}}
