@@ -71,15 +71,22 @@ function TradingViewTicker() {
 
 function TradingViewChart() {
 	const ref = useRef<HTMLDivElement | null>(null);
+
 	useEffect(() => {
 		if (!ref.current) return;
+
 		ref.current.innerHTML = "";
+
 		const script = document.createElement("script");
+
 		script.src =
 			"https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+
 		script.async = true;
+
 		script.innerHTML = JSON.stringify({
-			autosize: true,
+			width: "100%",
+			height: 800,
 			symbol: "BITSTAMP:BTCUSD",
 			interval: "D",
 			timezone: "Etc/UTC",
@@ -89,13 +96,15 @@ function TradingViewChart() {
 			allow_symbol_change: true,
 			calendar: false,
 		});
+
 		ref.current.appendChild(script);
 	}, []);
+
 	return (
 		<div
-			className="w-full tradingview-widget-container"
 			ref={ref}
-			style={{ height: 520 }}
+			className="w-full tradingview-widget-container"
+			style={{ height: 800 }}
 		>
 			<div
 				className="tradingview-widget-container__widget"
@@ -143,10 +152,6 @@ export default function Trading() {
 
 	return (
 		<main>
-			<div className="bg-card/50 border-border/40 border-b">
-				<TradingViewTicker />
-			</div>
-
 			{/* Hero */}
 			<section className="relative py-20 lg:py-28 hero-gradient">
 				<div
@@ -180,7 +185,6 @@ export default function Trading() {
 								onClick={() =>
 									navigate({ to: "/register", search: { ref: undefined } })
 								}
-								size="lg"
 								className="bg-primary hover:bg-primary/90 px-8 h-12 font-semibold text-primary-foreground"
 							>
 								Start Trading Now
@@ -189,7 +193,6 @@ export default function Trading() {
 								onClick={() =>
 									navigate({ to: "/register", search: { ref: undefined } })
 								}
-								size="lg"
 								variant="outline"
 								className="px-8 border-border/60 h-12"
 							>
@@ -199,6 +202,10 @@ export default function Trading() {
 					</motion.div>
 				</div>
 			</section>
+
+			<div className="bg-card/50 border-border/40 border-b">
+				<TradingViewTicker />
+			</div>
 
 			{/* Highlights */}
 			<section className="py-10">
